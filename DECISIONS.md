@@ -290,3 +290,12 @@ last. Each entry: what, why, where.
    local values win on conflict, and the remote environment snapshot is kept
    under `remote_env`. The first dev run confirmed `system_merged = true` only
    for LLaVA-1.5.
+10. **Dev round 1 → guidelines v1.1.** Round 1 kappa: category 1.00, color
+    0.70, material 0.34. Most material disagreements came from one annotator
+    never using `unknown` (cotton chosen from garment type), linen over-use,
+    and synthetic vs cotton on slight sheen; colour disagreements from printed
+    single-colour garments and very dark shades. v1.1 adds 11 decision rules
+    (material defaults to `unknown`; prints keep the base colour; dark shades
+    keep their hue) without changing the v1.0 text. Round-1 labels, the
+    disagreement sheet and the derived gold are archived in
+    `annotations/dev_round1/`; both annotators re-label dev independently.

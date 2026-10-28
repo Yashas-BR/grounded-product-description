@@ -1,7 +1,9 @@
 # Annotation Guidelines
 
-Version 1.0 (copied verbatim from build spec §6; bump the version whenever
-the guidelines are refined after the dev round).
+Version 1.1 (used from dev round 2). The rules below are build spec §6
+verbatim (v1.0); the "Clarifications (v1.1)" section adds decision rules after
+dev round 1 (kappa: category 1.00, color 0.70, material 0.34 — below the 0.6
+bar). Round-1 labels are archived in `annotations/dev_round1/`.
 
 - **Category:** the main garment being sold; `exclude` if the image shows
   something else.
@@ -18,6 +20,41 @@ the guidelines are refined after the dev round).
 Never use the product name, brand, price or general knowledge ("t-shirts are
 usually cotton"). That prior-based inference is what the study measures in
 models.
+
+## Clarifications (v1.1)
+
+Written after dev round 1, where most disagreements came from the cases below.
+They refine the v1.0 rules and do not change them.
+
+**Material — the default is `unknown`.**
+
+1. Start every item at `unknown`. Change it only if you can point to the cue
+   in the image (zoom in). If you would have to say "it's probably…", keep
+   `unknown`.
+2. If you hesitate between two fabrics, choose `unknown`.
+3. The garment type is never a cue. A plain t-shirt, shirt, sweatshirt or
+   jacket with no visible weave, loops or sheen is `unknown`, not cotton.
+4. **Cotton** only when a matte woven texture is actually visible (e.g. the
+   weave of a shirt cloth at full size). Smooth, flat, untextured fabric is
+   `unknown`.
+5. **Knit** when loops or ribbing are visible (sweaters, ribbed cuffs and
+   collars on the body of the garment). A smooth jersey t-shirt is `unknown`.
+6. **Denim** for twill weave, fading/whiskering or contrast stitching on jeans,
+   jackets or skirts. Jeans with these cues are denim, never linen.
+7. **Linen** needs both slub texture (uneven thick/thin threads) and creasing.
+   Creases alone are not enough.
+8. **Synthetic** only for clearly glossy technical or athletic fabric, or mesh.
+   A slight sheen on a printed kurta or saree is not enough → `unknown`.
+9. **Silk / chiffon**: silk for strong sheen with fluid drape; chiffon when the
+   fabric is visibly sheer (you can see through it).
+
+**Color.**
+
+10. A single-color garment with a print, logo or graphic is **not** multicolor:
+    label its base color. Use `exclude` only when no single color covers clearly
+    more than half of the garment.
+11. Dark shades: choose `black` only when no hue is visible. Dark navy → blue,
+    charcoal → grey, dark purple → purple, maroon → red.
 
 ## Process
 
