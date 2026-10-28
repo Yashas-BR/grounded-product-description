@@ -65,7 +65,7 @@ every stage caches JSONL outputs and resumes where it stopped.
 | M4 | Extraction: `extract.py`, `eval_extraction.py` | models run on dev+test; thresholds, T2, F2 wait for annotated gold |
 | M5 | Generation: `models.py`, `prompts.py`, `generate.py`, notebook 02 | code done, tested with mock models; GPU run pending |
 | M6 | APG: `apg.py` (+ `claims.py` matcher) | done; fallback rate on real dev outputs pending GPU |
-| M7 | Claims and judge: `claims.py`, `judge.py` | |
+| M7 | Claims and judge: `claims.py`, `judge.py` | code done; validation needs real outputs + hand labels |
 | M8 | Freeze prompt hashes and thresholds | |
 | M9 | Evaluation: `decompose.py`, notebook 03 | |
 | M10 | Human evaluation: `human_eval.py`, notebook 04 | |

@@ -172,3 +172,89 @@ def run_claims(project_dir: str | Path, generation_file: str | Path) -> Path:
     ]
     utils.append_jsonl(out, new)
     return out
+
+
+# --------------------------------------------------------------------------
+# Validation against human labels (60 dev descriptions, spec §10)
+# --------------------------------------------------------------------------
+
+def validation_sample(records, n: int = 60, seed: int = 42):
+    """``n`` descriptions spread evenly over conditions (seeded)."""
+    import pandas as pd
+
+    frame = pd.DataFrame(records)
+    conditions = sorted(frame["condition"].unique())
+    per = {c: n // len(conditions) + (i < n % len(conditions)) for i, c in enumerate(conditions)}
+    parts = [g.sample(n=min(per[c], len(g)), random_state=seed)
+             for c, g in frame.groupby("condition", sort=True)]
+    return pd.concat(parts).sample(frac=1, random_state=seed).reset_index(drop=True)
+
+
+def write_validation_sheets(sample, out_dir: str | Path, labellers: Sequence[str] = ("a", "b")):
+    """Blind sheets (description only) plus a key file.
+
+    Labellers fill ``category``, ``color`` and ``material`` with the labels the
+    description states (comma-separated; empty if not stated; ``other`` for an
+    off-taxonomy color), ignoring styling clauses as the guidelines say.
+    """
+    import pandas as pd
+
+    from groundedgen.generate import CACHE_KEY
+
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    sheet = pd.DataFrame({"row_id": range(1, len(sample) + 1), "description": sample["text"],
+                          **{a: "" for a in tx.ATTRIBUTES}})
+    paths = []
+    for who in labellers:
+        path = out_dir / f"claims_validation_{who}.csv"
+        sheet.to_csv(path, index=False)
+        paths.append(path)
+    sample[list(CACHE_KEY)].assign(row_id=sheet["row_id"], text=sample["text"]).to_csv(
+        out_dir / "claims_validation_key.csv", index=False)
+    return paths
+
+
+def _label_set(cell: Any) -> set[str]:
+    return {v.strip().lower() for v in str(cell or "").split(",") if v.strip()}
+
+
+def precision_recall(predicted: Sequence[set[str]], gold: Sequence[set[str]]) -> dict[str, float]:
+    """Value-level precision and recall over descriptions."""
+    tp = sum(len(p & g) for p, g in zip(predicted, gold))
+    n_p = sum(len(p) for p in predicted)
+    n_g = sum(len(g) for g in gold)
+    return {"precision": tp / n_p if n_p else 1.0, "recall": tp / n_g if n_g else 1.0,
+            "n_predicted": n_p, "n_gold": n_g}
+
+
+def score_validation(out_dir: str | Path, labellers: Sequence[str] = ("a", "b"),
+                     target: float = 0.95) -> dict[str, Any]:
+    """Per-attribute precision/recall of the extractor against each labeller and
+    against the labels both agree on; flags any value below ``target``."""
+    import pandas as pd
+
+    out_dir = Path(out_dir)
+    key = pd.read_csv(out_dir / "claims_validation_key.csv", keep_default_na=False)
+    sheets = {w: pd.read_csv(out_dir / f"claims_validation_{w}.csv", keep_default_na=False)
+              .set_index("row_id") for w in labellers}
+    found = [extract_claims(t) for t in key["text"]]
+    report: dict[str, Any] = {"n_descriptions": len(key), "target": target}
+    for attribute in tx.ATTRIBUTES:
+        pred = [set(f[attribute]["values"]) for f in found]
+        human = {w: [_label_set(s.loc[r, attribute]) for r in key["row_id"]]
+                 for w, s in sheets.items()}
+        entry = {f"vs_{w}": precision_recall(pred, h) for w, h in human.items()}
+        if len(labellers) == 2:
+            a, b = human.values()
+            agree = [i for i in range(len(key)) if a[i] == b[i]]
+            entry["vs_agreed"] = precision_recall([pred[i] for i in agree], [a[i] for i in agree])
+            entry["human_agreement"] = len(agree) / len(key) if len(key) else float("nan")
+        report[attribute] = entry
+    report["meets_target"] = all(
+        v[m] >= target
+        for attribute in tx.ATTRIBUTES
+        for name, v in report[attribute].items() if name.startswith("vs_")
+        for m in ("precision", "recall")
+    )
+    return report

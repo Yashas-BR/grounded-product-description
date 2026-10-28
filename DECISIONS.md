@@ -207,3 +207,27 @@ last. Each entry: what, why, where.
    verification.
 10. **The section 9 property is tested on 28 hand-written adversarial outputs
     plus 3,000 seeded random outputs** (`tests/test_apg.py`).
+
+## M7 — Claims and judge
+
+1. **Judge JSON parsing** strips code fences, then tries the whole answer and
+   the outermost `{...}` substring. Valid means `{"claims": [...]}` with a
+   string `text` and a known `type` per item (types are lower-cased). An
+   invalid answer is retried once with "Answer with valid JSON only."; a
+   second failure is stored with `parse_error = true` and left out of UCR
+   (the parse-error rate is reported alongside).
+2. **Judge evidence** is the condition's own evidence; for A and A-F it is the
+   gold JSON with `exclude`/missing shown as `unknown`, as in condition C.
+3. **Claims are extracted for dev and test generation files together**;
+   generation files hold both splits, and later stages select by item id.
+4. **Claims validation sheets** list descriptions only (blind to condition);
+   each labeller writes the stated labels comma-separated. The extractor is
+   scored per attribute at value level against each labeller and against the
+   labels both agree on; the 0.95 target applies to every comparison.
+5. **Judge validation** uses blind sheets where labellers write each
+   unsupported claim as `words | type`. Judge and human claims match if one
+   span contains the other or their word Jaccard is at least 0.5 (greedy
+   one-to-one). Subjective claims are excluded from precision and recall.
+   Human–human Cohen's kappa is computed per description on "has at least one
+   non-subjective unsupported claim", because claim-level spans have no fixed
+   unit to compare.
