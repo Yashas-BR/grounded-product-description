@@ -1,6 +1,7 @@
 # Annotation Guidelines
 
-Version 1.1 (used from dev round 2). The rules below are build spec §6
+Version 1.1 — **frozen for test (2026-10-28)**; do not change it from here on.
+Used from dev round 2. The rules below are build spec §6
 verbatim (v1.0); the "Clarifications (v1.1)" section adds decision rules after
 dev round 1 (kappa: category 1.00, color 0.70, material 0.34 — below the 0.6
 bar). Round-1 labels are archived in `annotations/dev_round1/`.

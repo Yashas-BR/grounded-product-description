@@ -305,3 +305,19 @@ last. Each entry: what, why, where.
     (`annotate.recheck_items`, notebook "Re-check" cell) and keeps a fabric only
     if the cue is visible. Kappa is recomputed afterwards; both values are
     reported.
+12. **Guidelines v1.1 frozen with dev material kappa 0.54 (deviation from the
+    0.6 rule).** Dev kappa history for material: round 1 0.34; round 2 0.71
+    (but 0/40 `unknown`, suggesting shared garment-type priors); after the
+    visibility re-check 0.54 (95% bootstrap CI 0.35–0.71; raw agreement 0.625;
+    15 `unknown` labels). After the re-check, 11 of 15 disagreements are
+    "unknown vs a fabric" and, where both annotators named a fabric, they chose
+    the same one on 23 of 27 items (85%): the remaining disagreement is about
+    *whether* the fabric is visible, an inherently graded judgement at
+    384×512. No further dev round was run because the CI includes 0.6 and the
+    annotators had seen the 40 dev images three times (a further round would
+    partly measure recall). Test (200 fresh items) gives the main agreement
+    estimate. Category 1.00, color 0.84. All values are reported in the paper.
+13. **Dev adjudication** uses `annotations/dev_adjudication.html` (image, both
+    labels, a dropdown of all allowed values), which writes the filled
+    `disagreements_dev.csv`. The adjudicator is a third team member and may
+    choose a value neither annotator chose.
