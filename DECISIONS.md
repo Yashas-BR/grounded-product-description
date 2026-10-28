@@ -72,3 +72,24 @@ last. Each entry: what, why, where.
    Product Images dataset and releases item ids only. The 900×1200 mirror and
    the 25 GB Kaggle original were rejected as heavier for no gain at CLIP's
    224 px and SigLIP's 384 px input sizes.
+
+## M3 — Annotation
+
+1. **Annotator ids are `a` and `b`** (`annotation.annotators` in the config);
+   files are `annotations/{split}_a.csv` and `{split}_b.csv`.
+2. **A separate `notebooks/annotation.ipynb`** runs the tool and the agreement
+   step. The spec lists five numbered notebooks but no home for annotation,
+   which runs on a CPU runtime, by different people, alongside M5–M7.
+3. **Skip leaves an item unannotated**; it is not written to the CSV and the
+   tool resumes there next time.
+4. **Unresolved pairs get empty gold** (treated as missing, so not scored)
+   and are listed in `ground_truth_report.json`.
+5. **Items labelled by only one annotator** take that label with
+   `gt_source = annotated_single`; items nobody labelled keep metadata gold
+   with `gt_source = metadata`. `gt_source` is per item.
+6. **A stored `final_value` is kept only while both labels are unchanged**, so
+   re-labelling dev after a guideline revision forces a fresh adjudication.
+7. **The material-kappa check is a flag, not a stop**: the report sets
+   `material_kappa_below_threshold`; a NaN kappa does not set it.
+8. **Material unknown share** is computed over items whose material gold is
+   set (unresolved and unlabelled items are left out).

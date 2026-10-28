@@ -53,7 +53,7 @@ every stage caches JSONL outputs and resumes where it stopped.
 |---|-----------|--------|
 | M1 | Foundations: utils, taxonomy, metrics, config, tests | done |
 | M2 | Data: `data.py`, notebook 01 part 1 | code done; Colab run pending |
-| M3 | Annotation: `annotate.py`, `agreement.py`, guidelines | |
+| M3 | Annotation: `annotate.py`, `agreement.py`, guidelines, `notebooks/annotation.ipynb` | code done; real labelling pending |
 | M4 | Extraction: `extract.py`, `eval_extraction.py` | |
 | M5 | Generation: `models.py`, `prompts.py`, `generate.py` | |
 | M6 | APG: `apg.py` | |
