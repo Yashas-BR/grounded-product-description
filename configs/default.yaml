@@ -1,0 +1,74 @@
+# Default configuration for the Extract, Abstain, Generate pipeline.
+# Every path, seed, model id and threshold rule lives here (spec §0.4).
+# Label sets live in groundedgen/taxonomy.py; prompts in groundedgen/prompts.py.
+
+project_dir: /content/drive/MyDrive/grounded-hallucination
+code_dir: /content/ghd
+seed: 42
+
+data:
+  # Same rows and ids as ashraq/fashion-product-images-small (whose images are
+  # 60x80 px), at 384x512. See DECISIONS.md, M2 #7.
+  hf_dataset: benitomartin/fashion-product-images-small-384x512
+  hf_split: train
+  hf_revision: 2bb740f8dddd4ee43738bb2b6b4ed4dbb07a3bbe
+  master_category: Apparel
+  test_size: 200
+  dev_size: 40
+  test_seed: 42          # test is drawn first ...
+  dev_seed: 43           # ... then dev from the remaining items
+  min_side_px: 64
+  jpeg_quality: 95
+
+annotation:
+  annotators: [a, b]
+  material_kappa_min: 0.6
+  guidelines_version: "1.0"
+
+extraction:
+  models:
+    - openai/clip-vit-large-patch14
+    - google/siglip-so400m-patch14-384
+  dtype: float16
+  batch_size: 32
+  threshold_rule:
+    target_accuracy: 0.90  # lowest t with selective accuracy >= target on dev
+
+quantization:              # applied to every 7B model
+  load_in_4bit: true
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_compute_dtype: float16
+
+generation:
+  prompt_version: v1
+  do_sample: false
+  max_new_tokens: 160
+  batch_size: 8
+  vlms:
+    primary: llava-hf/llava-1.5-7b-hf
+    secondary: Qwen/Qwen2-VL-2B-Instruct
+    fallback: Salesforce/blip2-opt-2.7b
+  llms:
+    primary: Qwen/Qwen2.5-7B-Instruct
+    secondary: mistralai/Mistral-7B-Instruct-v0.3
+
+judge:
+  model: Qwen/Qwen2.5-7B-Instruct
+  max_new_tokens: 256      # see DECISIONS.md
+  validation_fraction: 0.2
+
+claims_validation:
+  n_descriptions: 60
+  target_precision_recall: 0.95
+
+metrics:
+  bootstrap_resamples: 2000
+  ci_level: 0.95
+  seed: 42
+  alpha: 0.05
+
+human_eval:
+  n_items: 50
+  min_ethnic: 8
+  conditions: [A-F, B-Abs, APG]
+  seed: 42

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+# Data and outputs live on Google Drive, never in the repo.
+data/
+annotations/
+outputs/
+*.env
