@@ -341,6 +341,7 @@ def run_matrix(
             vlm_jobs = {c: build_jobs(c, items) for c in vlm_conditions}
             if all(not _pending(project_dir, c, name, None, j) for c, j in vlm_jobs.items()):
                 continue
+            models.reset_peak_memory()
             if load_vision:
                 gen = load_vision(name)
             else:
@@ -360,6 +361,7 @@ def run_matrix(
             name = gen_cfg["llms"][role]
             if all(not _pending(project_dir, c, name, e, j) for c, e, j in llm_plan):
                 continue
+            models.reset_peak_memory()
             gen = load_text(name) if load_text else models.HFTextGenerator(name, cfg)
             for condition, extractor, jobs in llm_plan:
                 out = generation_path(project_dir, condition, name, extractor)

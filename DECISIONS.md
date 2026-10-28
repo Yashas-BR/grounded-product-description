@@ -281,3 +281,7 @@ last. Each entry: what, why, where.
    for CVD: worst adjacent ΔE 9.1); slots below 3:1 contrast get direct labels
    (F4) or a legend plus table view (F3, with T4). F4 merges labels of points
    closer than 0.04.
+13. **Peak GPU memory is reset before each model and summed over GPUs.** The
+    first Kaggle dev run reported an identical 3.09 GB for all four models
+    because the counter was never reset and only GPU 0 was read; with
+    `device_map="auto"` on T4 ×2 the sum is the single-T4 equivalent.

@@ -132,15 +132,30 @@ def free_memory() -> None:
         torch.cuda.empty_cache()
 
 
+def reset_peak_memory() -> None:
+    """Reset the peak-memory counters of every GPU (call before loading a model)."""
+    try:
+        import torch
+    except ImportError:
+        return
+    if torch.cuda.is_available():
+        for device in range(torch.cuda.device_count()):
+            torch.cuda.reset_peak_memory_stats(device)
+
+
 def peak_gpu_gb() -> float | None:
-    """Peak allocated GPU memory since the last reset, in GB (``None`` on CPU)."""
+    """Peak allocated memory since the last reset, summed over all GPUs, in GB.
+
+    ``device_map="auto"`` can split a model across GPUs (Kaggle T4 ×2), so the
+    sum is what a single 16 GB T4 would have had to hold. ``None`` on CPU.
+    """
     try:
         import torch
     except ImportError:
         return None
     if not torch.cuda.is_available():
         return None
-    return torch.cuda.max_memory_allocated() / 2**30
+    return sum(torch.cuda.max_memory_allocated(d) for d in range(torch.cuda.device_count())) / 2**30
 
 
 def _decode_new(tokenizer, output_ids, input_len: int) -> list[str]:
