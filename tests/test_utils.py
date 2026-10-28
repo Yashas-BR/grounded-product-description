@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 
 import numpy as np
 
@@ -117,4 +118,8 @@ def test_load_hf_token_uses_environment_without_writing(tmp_path, monkeypatch):
 
 def test_load_hf_token_missing(monkeypatch):
     monkeypatch.delenv("HF_TOKEN", raising=False)
+    # Hide Colab/Kaggle secret stores so the test means the same on every machine
+    # (on Kaggle a real HF_TOKEN secret would otherwise be found).
+    for module in ("google.colab", "kaggle_secrets"):
+        monkeypatch.setitem(sys.modules, module, None)
     assert utils.load_hf_token() is False
