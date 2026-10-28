@@ -72,6 +72,24 @@ last. Each entry: what, why, where.
    Product Images dataset and releases item ids only. The 900×1200 mirror and
    the 25 GB Kaggle original were rejected as heavier for no gain at CLIP's
    224 px and SigLIP's 384 px input sizes.
+8. **M2 runs locally, not on Colab.** Colab would not assign a backend from
+   the team's location, and the data stage needs no GPU. The local machine
+   has about 2 GB of free disk, too little for the `datasets` cache (~4 GB),
+   so `data.loader: remote_parquet` (set in `configs/local.yaml`) reads the
+   Hub's parquet shards over HTTP: metadata columns by byte range, and image
+   bytes only for the row groups that hold candidates, in memory. Images are
+   the original parquet bytes; the Hub's rows API was rejected because it
+   re-encodes JPEGs (49 KB → 18 KB, pixel RMS 3.1). Row order equals
+   `datasets.load_dataset` order, so both loaders give the same splits.
+   `python -m groundedgen.data configs/local.yaml` runs the stage. First
+   real run (2026-10-28): 17,162 items after filtering, 200 test + 40 dev,
+   category spread 1 in both, no image under 64 px, 25 row groups fetched.
+10. **The project lives on D: (`D:/NLP_CV`)** and model downloads go to
+    `D:/hf_cache` (`hf_home` in `configs/local.yaml`, applied by
+    `utils.apply_runtime_env` before any Hugging Face import).
+9. **Machine-specific settings live in `configs/local.yaml`** (project_dir,
+   code_dir, loader), merged over `default.yaml` via `load_config(extra_paths=...)`.
+   Every label set, prompt and threshold rule stays in `default.yaml`.
 
 ## M3 — Annotation
 

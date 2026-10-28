@@ -12,6 +12,8 @@ Pipeline (``build_dataset``):
 
 from __future__ import annotations
 
+import argparse
+import io
 import json
 import logging
 from collections import Counter
@@ -44,15 +46,117 @@ SPLITS: tuple[str, ...] = ("test", "dev")
 # --------------------------------------------------------------------------
 
 def load_hf_dataset(cfg: Mapping[str, Any]):
-    """Load the Hugging Face dataset named in ``cfg["data"]`` (images stay lazy)."""
+    """Load the dataset named in ``cfg["data"]`` (images stay lazy).
+
+    ``data.loader`` picks the backend: ``datasets`` (default; downloads and
+    caches the whole dataset, fine on Colab) or ``remote_parquet`` (reads the
+    Hub's parquet files over HTTP, for machines with little disk).
+    """
+    data_cfg = cfg["data"]
+    if data_cfg.get("loader", "datasets") == "remote_parquet":
+        return RemoteParquetDataset.from_hub(
+            data_cfg["hf_dataset"], data_cfg.get("hf_revision"), data_cfg["hf_split"]
+        )
     from datasets import load_dataset  # lazy: not needed for CPU tests
 
-    data_cfg = cfg["data"]
     return load_dataset(
         data_cfg["hf_dataset"],
         split=data_cfg["hf_split"],
         revision=data_cfg.get("hf_revision"),
     )
+
+
+class RemoteParquetDataset:
+    """Read-only view of parquet shards that never stores the dataset on disk.
+
+    Metadata columns are read with byte-range requests (a few hundred KB).
+    Image bytes are fetched per row group, only for rows that are asked for,
+    and kept in memory. Row order is the shards' sorted order, which is the
+    order ``datasets.load_dataset`` uses, so ``row_idx`` matches either loader.
+
+    Args:
+        files: parquet paths on ``fs``, in dataset order.
+        fs: an fsspec filesystem (``HfFileSystem`` for the Hub).
+    """
+
+    def __init__(self, files: Sequence[str], fs, columns: Sequence[str] | None = None):
+        import pyarrow.parquet as pq
+
+        self.files = list(files)
+        self.fs = fs
+        self.columns = list(columns) if columns else None
+        self._pq = pq
+        self._index: list[tuple[int, int, int]] = []  # row -> (file, row group, offset)
+        for f, path in enumerate(self.files):
+            with self._open(path) as fh:
+                meta = pq.ParquetFile(fh, pre_buffer=False).metadata
+            for g in range(meta.num_row_groups):
+                self._index.extend((f, g, k) for k in range(meta.row_group(g).num_rows))
+        self._images: dict[int, bytes] = {}
+        self.n_row_groups_fetched = 0
+
+    @classmethod
+    def from_hub(cls, repo_id: str, revision: str | None, split: str = "train"):
+        """Shards ``data/{split}-*.parquet`` of a Hub dataset at ``revision``."""
+        from huggingface_hub import HfFileSystem
+
+        fs = HfFileSystem()
+        root = f"datasets/{repo_id}@{revision}" if revision else f"datasets/{repo_id}"
+        files = sorted(fs.glob(f"{root}/data/{split}-*.parquet"))
+        if not files:
+            raise FileNotFoundError(f"No parquet shards for split {split!r} in {root}")
+        return cls(files, fs)
+
+    def _open(self, path: str):
+        # Exact range requests: read-ahead caching would pull whole files.
+        return self.fs.open(path, "rb", cache_type="none")
+
+    def __len__(self) -> int:
+        return len(self._index)
+
+    def select_columns(self, columns: Sequence[str]) -> "RemoteParquetDataset":
+        view = object.__new__(RemoteParquetDataset)
+        view.__dict__.update(self.__dict__)
+        view.columns = list(columns)
+        return view
+
+    def to_pandas(self) -> pd.DataFrame:
+        """The selected (non-image) columns of every shard, read in parallel."""
+        from concurrent.futures import ThreadPoolExecutor
+
+        def read(path: str) -> pd.DataFrame:
+            with self._open(path) as fh:
+                pf = self._pq.ParquetFile(fh, pre_buffer=False)
+                return pf.read(columns=self.columns).to_pandas()
+
+        with ThreadPoolExecutor(max_workers=len(self.files)) as pool:
+            frames = list(pool.map(read, self.files))
+        return pd.concat(frames, ignore_index=True)
+
+    def prefetch(self, row_indices: Sequence[int]) -> None:
+        """Fetch image bytes for ``row_indices``, one request per row group."""
+        wanted: dict[tuple[int, int], list[int]] = {}
+        for idx in sorted(set(int(i) for i in row_indices) - set(self._images)):
+            f, g, _ = self._index[idx]
+            wanted.setdefault((f, g), []).append(idx)
+        for n, ((f, g), rows) in enumerate(sorted(wanted.items()), start=1):
+            LOGGER.info("Fetching images: row group %d/%d (%d rows)", n, len(wanted), len(rows))
+            with self._open(self.files[f]) as fh:
+                table = self._pq.ParquetFile(fh, pre_buffer=False).read_row_group(
+                    g, columns=["image"]
+                )
+            column = table.column("image")
+            for idx in rows:
+                self._images[idx] = column[self._index[idx][2]].as_py()["bytes"]
+            self.n_row_groups_fetched += 1
+
+    def __getitem__(self, idx: int) -> dict[str, Any]:
+        from PIL import Image
+
+        idx = int(idx)
+        if idx not in self._images:
+            self.prefetch([idx])
+        return {"image": Image.open(io.BytesIO(self._images[idx]))}
 
 
 def metadata_frame(ds) -> pd.DataFrame:
@@ -352,15 +456,19 @@ def build_dataset(
     data_cfg = cfg["data"]
     ds = ds if ds is not None else load_hf_dataset(cfg)
     meta, filter_report = filter_metadata(metadata_frame(ds), data_cfg["master_category"])
-    checker = ImageChecker(ds, data_cfg["min_side_px"])
-    splits = draw_splits(
-        meta,
+    split_args = dict(
         test_size=data_cfg["test_size"],
         dev_size=data_cfg["dev_size"],
         test_seed=data_cfg["test_seed"],
         dev_seed=data_cfg["dev_seed"],
-        is_usable=checker,
     )
+    if hasattr(ds, "prefetch"):
+        # Batch the remote image fetches: the draw without size checks gives
+        # the likely candidates; any replacement is fetched on demand.
+        preview = draw_splits(meta, **split_args)
+        ds.prefetch(pd.concat(preview.values())["row_idx"].tolist())
+    checker = ImageChecker(ds, data_cfg["min_side_px"])
+    splits = draw_splits(meta, **split_args, is_usable=checker)
     n_written = export_images(splits, checker, project_dir, data_cfg["jpeg_quality"])
     manifest = build_manifest(splits, checker.sizes)
 
@@ -369,6 +477,7 @@ def build_dataset(
     report = {
         "dataset": data_cfg["hf_dataset"],
         "revision": data_cfg.get("hf_revision"),
+        "loader": data_cfg.get("loader", "datasets"),
         "filtering": filter_report,
         "n_images_too_small": checker.n_too_small,
         "n_images_written": n_written,
@@ -400,3 +509,35 @@ def load_manifest(cfg: Mapping[str, Any], splits: Sequence[str] | None = None) -
     if splits is not None:
         frame = frame[frame["split"].isin(splits)].reset_index(drop=True)
     return frame
+
+
+# --------------------------------------------------------------------------
+# Command line (local runs without a notebook)
+# --------------------------------------------------------------------------
+
+def main(argv: Sequence[str] | None = None) -> None:
+    """``python -m groundedgen.data [extra.yaml ...] [--overwrite]``.
+
+    Extra YAML files are merged over ``configs/default.yaml`` in order, e.g.
+    ``configs/local.yaml`` for a local ``project_dir`` and the low-disk loader.
+    """
+    parser = argparse.ArgumentParser(description=main.__doc__)
+    parser.add_argument("configs", nargs="*", help="YAML files merged over the default")
+    parser.add_argument("--overwrite", action="store_true", help="rebuild an existing manifest")
+    args = parser.parse_args(argv)
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    cfg = utils.load_config(extra_paths=args.configs)
+    utils.apply_runtime_env(cfg)
+    utils.set_seed(cfg["seed"])
+    utils.update_run_info(utils.project_path(cfg, "outputs", "run_info.json"), {
+        "env": utils.capture_env(),
+        "data": {"dataset": cfg["data"]["hf_dataset"], "revision": cfg["data"]["hf_revision"],
+                 "loader": cfg["data"].get("loader", "datasets")},
+    })
+    _, report = build_dataset(cfg, overwrite=args.overwrite)
+    print(json.dumps(report, indent=2))
+
+
+if __name__ == "__main__":
+    main()

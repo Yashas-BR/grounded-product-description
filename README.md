@@ -31,6 +31,14 @@ drive.mount("/content/drive")
 !python -m pytest -q tests
 ```
 
+Local CPU stages (data splits; later evaluation and figures) run without a
+notebook. `configs/local.yaml` sets a local `project_dir` and a low-disk
+loader that streams the dataset instead of caching it:
+
+```bash
+python -m groundedgen.data configs/local.yaml
+```
+
 Gated checkpoints (Mistral) need an `HF_TOKEN` in Colab secrets; it is never
 written to disk or logs.
 
@@ -52,9 +60,9 @@ every stage caches JSONL outputs and resumes where it stopped.
 | # | Milestone | Status |
 |---|-----------|--------|
 | M1 | Foundations: utils, taxonomy, metrics, config, tests | done |
-| M2 | Data: `data.py`, notebook 01 part 1 | code done; Colab run pending |
+| M2 | Data: `data.py`, notebook 01 part 1 | done (run locally) |
 | M3 | Annotation: `annotate.py`, `agreement.py`, guidelines, `notebooks/annotation.ipynb` | code done; real labelling pending |
-| M4 | Extraction: `extract.py`, `eval_extraction.py` | |
+| M4 | Extraction: `extract.py`, `eval_extraction.py` | code done; model run and evaluation pending |
 | M5 | Generation: `models.py`, `prompts.py`, `generate.py` | |
 | M6 | APG: `apg.py` | |
 | M7 | Claims and judge: `claims.py`, `judge.py` | |

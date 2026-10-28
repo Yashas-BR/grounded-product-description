@@ -219,3 +219,62 @@ def test_load_manifest_prefers_final(tmp_project):
     final.to_csv(tmp_project / "data" / "manifest_final.csv", index=False)
     loaded = data.load_manifest(cfg, splits=["dev"])
     assert len(loaded) == 13 and (loaded["gt_material"] == "unknown").all()
+
+
+# ---- low-disk remote parquet loader ----------------------------------------
+
+def _write_shards(tmp_path, rows, n_shards=2, row_group_size=7):
+    import io as _io
+
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    paths = []
+    per = -(-len(rows) // n_shards)
+    for s in range(n_shards):
+        chunk = rows[s * per:(s + 1) * per]
+        images = []
+        for r in chunk:
+            buf = _io.BytesIO()
+            Image.new("RGB", r["_size"], color=(r["id"] % 255, 0, 0)).save(buf, format="JPEG")
+            images.append({"bytes": buf.getvalue(), "path": None})
+        table = pa.table({
+            **{c: [r[c] for r in chunk] for c in chunk[0] if c != "_size"},
+            "image": images,
+        })
+        path = tmp_path / f"train-{s:05d}-of-{n_shards:05d}.parquet"
+        pq.write_table(table, path, row_group_size=row_group_size)
+        paths.append(str(path))
+    return paths
+
+
+def test_remote_parquet_dataset_reads_metadata_and_images(tmp_path):
+    import fsspec
+
+    rows = make_rows(per_color=1)
+    paths = _write_shards(tmp_path, rows)
+    ds = data.RemoteParquetDataset(paths, fsspec.filesystem("file"))
+    assert len(ds) == len(rows)
+    meta = data.metadata_frame(ds)
+    assert meta["id"].tolist() == [r["id"] for r in rows]  # shard order preserved
+    assert "productDisplayName" not in meta.columns
+    assert ds.n_row_groups_fetched == 0  # metadata never touches image bytes
+
+    ds.prefetch([0, 1, 2, len(rows) - 1])
+    assert ds.n_row_groups_fetched == 2  # one per touched row group
+    image = ds[len(rows) - 1]["image"]
+    assert image.size == rows[-1]["_size"]
+    assert image.getpixel((0, 0))[0] == pytest.approx(rows[-1]["id"] % 255, abs=3)
+
+
+def test_build_dataset_with_remote_parquet(tmp_project, tmp_path):
+    import fsspec
+
+    rows = make_rows(per_color=1, small_every=9)
+    ds = data.RemoteParquetDataset(_write_shards(tmp_path, rows, row_group_size=50),
+                                   fsspec.filesystem("file"))
+    manifest, report = data.build_dataset(_cfg(tmp_project, test_size=26, dev_size=13), ds=ds)
+    assert len(manifest) == 39
+    assert (manifest[["width", "height"]].min(axis=1) >= 64).all()
+    for rel in manifest["image_path"]:
+        assert (tmp_project / rel).exists()

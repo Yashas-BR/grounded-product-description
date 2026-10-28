@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 
 import numpy as np
 
@@ -79,3 +80,29 @@ def test_capture_env_has_required_fields():
         assert key in env
     assert set(utils.TRACKED_PACKAGES) == set(env["packages"])
     json.dumps(env)  # must be serialisable
+
+
+def test_extra_config_paths_merge_in_order(tmp_path):
+    first = tmp_path / "a.yaml"
+    second = tmp_path / "b.yaml"
+    first.write_text("project_dir: /x\ndata:\n  loader: remote_parquet\n", encoding="utf-8")
+    second.write_text("project_dir: /y\n", encoding="utf-8")
+    cfg = utils.load_config(extra_paths=[first, second], overrides={"seed": 7})
+    assert cfg["project_dir"] == "/y" and cfg["seed"] == 7
+    assert cfg["data"]["loader"] == "remote_parquet"
+    assert cfg["data"]["test_size"] == 200
+
+
+def test_local_config_only_overrides_machine_settings():
+    local = utils._read_yaml(utils.REPO_ROOT / "configs" / "local.yaml")
+    assert set(local) <= {"project_dir", "code_dir", "hf_home", "data"}
+    assert set(local.get("data", {})) <= {"loader"}
+
+
+def test_apply_runtime_env_sets_hf_home_once(tmp_path, monkeypatch):
+    monkeypatch.delenv("HF_HOME", raising=False)
+    utils.apply_runtime_env({"hf_home": str(tmp_path / "cache")})
+    assert os.environ["HF_HOME"] == str(tmp_path / "cache")
+    assert (tmp_path / "cache").is_dir()
+    utils.apply_runtime_env({"hf_home": str(tmp_path / "other")})  # existing value wins
+    assert os.environ["HF_HOME"] == str(tmp_path / "cache")

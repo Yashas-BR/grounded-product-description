@@ -1,0 +1,10 @@
+# Overrides for running stages on the local Windows machine (CPU only).
+# Use: python -m groundedgen.data configs/local.yaml
+# Only machine-specific settings belong here; everything else stays in default.yaml.
+
+project_dir: D:/NLP_CV/grounded-hallucination
+code_dir: D:/NLP_CV/ghd
+hf_home: D:/hf_cache       # Hugging Face downloads (models) go here
+
+data:
+  loader: remote_parquet   # stream parquet from the Hub; no local dataset cache

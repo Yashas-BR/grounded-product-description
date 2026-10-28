@@ -12,6 +12,7 @@ data:
   hf_dataset: benitomartin/fashion-product-images-small-384x512
   hf_split: train
   hf_revision: 2bb740f8dddd4ee43738bb2b6b4ed4dbb07a3bbe
+  loader: datasets       # or remote_parquet (low disk; see configs/local.yaml)
   master_category: Apparel
   test_size: 200
   dev_size: 40

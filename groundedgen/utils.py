@@ -58,22 +58,43 @@ def _deep_merge(base: Mapping[str, Any], override: Mapping[str, Any]) -> dict[st
     return merged
 
 
+def _read_yaml(path: str | Path) -> dict[str, Any]:
+    with open(path, encoding="utf-8") as fh:
+        return yaml.safe_load(fh) or {}
+
+
 def load_config(
     path: str | Path | None = None,
     overrides: Mapping[str, Any] | None = None,
+    extra_paths: Sequence[str | Path] = (),
 ) -> dict[str, Any]:
     """Load the YAML config (default ``configs/default.yaml``) and apply overrides.
 
     Args:
         path: YAML file to load; ``None`` uses the repository default.
-        overrides: nested mapping merged on top, e.g.
+        overrides: nested mapping merged last, e.g.
             ``{"project_dir": "/tmp/x", "data": {"dev_size": 10}}``.
+        extra_paths: YAML files merged over the base in order (e.g.
+            ``configs/local.yaml`` for a machine-specific ``project_dir``).
     """
-    with open(path or DEFAULT_CONFIG_PATH, encoding="utf-8") as fh:
-        cfg = yaml.safe_load(fh) or {}
+    cfg = _read_yaml(path or DEFAULT_CONFIG_PATH)
+    for extra in extra_paths:
+        cfg = _deep_merge(cfg, _read_yaml(extra))
     if overrides:
         cfg = _deep_merge(cfg, overrides)
     return cfg
+
+
+def apply_runtime_env(cfg: Mapping[str, Any]) -> None:
+    """Point the Hugging Face cache at ``cfg["hf_home"]`` if set.
+
+    Must run before ``transformers`` / ``huggingface_hub`` are imported; an
+    ``HF_HOME`` already set in the environment wins.
+    """
+    hf_home = cfg.get("hf_home")
+    if hf_home and "HF_HOME" not in os.environ:
+        Path(hf_home).mkdir(parents=True, exist_ok=True)
+        os.environ["HF_HOME"] = str(hf_home)
 
 
 def project_path(cfg: Mapping[str, Any], *parts: str) -> Path:
