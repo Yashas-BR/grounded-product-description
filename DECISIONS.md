@@ -111,3 +111,33 @@ last. Each entry: what, why, where.
    `material_kappa_below_threshold`; a NaN kappa does not set it.
 8. **Material unknown share** is computed over items whose material gold is
    set (unresolved and unlabelled items are left out).
+
+## M4 — Extraction
+
+1. **On Windows, `groundedgen/__init__.py` imports torch first.** Importing
+   pyarrow (pulled in by pandas) before torch makes `from_pretrained`
+   segfault on the local machine (native DLL clash; reproduced in isolation).
+   Linux/Colab are unaffected and skip the import.
+2. **Scoring runs in NumPy float32 behind a small `DualEncoder` interface**, so
+   every rule (ensembling, softmax, margins, caching) is tested with a fake
+   encoder; only `HFDualEncoder` touches torch.
+3. **`margin` is top-1 minus top-2 probability.** The spec lists the field
+   without defining it; it is stored but not used for thresholds.
+4. **Infinite thresholds are stored as `null`** in `thresholds.json` (JSON has
+   no infinity) and read back as `math.inf` (always abstain).
+5. **Threshold candidates are the observed dev confidences**, so "lowest t
+   with selective accuracy ≥ 0.90" is searched exactly; accuracy is not
+   monotone in t, so the scan is exhaustive rather than a binary search.
+6. **At the dev-tuned threshold, coverage and selective accuracy are computed
+   over all scored pairs**; the abstention rate is over non-determinable
+   pairs only (gold `unknown`).
+7. **The `from_pretrained` dtype keyword is chosen by transformers version**
+   (`dtype` from 4.56, `torch_dtype` before), because the local machine has
+   transformers 5.x and Colab may not.
+8. **`sentencepiece` is a requirement** (SigLIP's tokenizer needs it).
+9. **Extraction ran locally on CPU** (fp32), as the spec's fp16-on-GPU rule
+   allows for CPU. CLIP takes about 3 s per image; the model cache is on D:.
+10. **SigLIP downloads avoid the Xet transfer locally.** The Xet download
+    stalled at 1.48 of 3.5 GB; resuming with `HF_HUB_DISABLE_XET=1` (plain
+    HTTP) finished in under 5 minutes. Revisions used: CLIP
+    `32bd6428…`, SigLIP `9fdffc58…` (full hashes in `outputs/run_info.json`).

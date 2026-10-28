@@ -62,6 +62,16 @@ def _as_tensor(output: Any, key: str):
     raise TypeError(f"Cannot find embeddings in {type(output).__name__}")
 
 
+def dtype_kwarg(dtype) -> dict[str, Any]:
+    """``from_pretrained`` dtype argument: ``dtype`` from transformers 4.56,
+    ``torch_dtype`` before (Colab and local versions differ)."""
+    import transformers
+    from packaging.version import Version
+
+    key = "dtype" if Version(transformers.__version__) >= Version("4.56") else "torch_dtype"
+    return {key: dtype}
+
+
 class HFDualEncoder:
     """CLIP or SigLIP via ``AutoModel`` / ``AutoProcessor``.
 
@@ -77,7 +87,7 @@ class HFDualEncoder:
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.dtype = torch.float16 if self.device == "cuda" else torch.float32
         self.processor = AutoProcessor.from_pretrained(name, revision=revision)
-        self.model = AutoModel.from_pretrained(name, revision=revision, torch_dtype=self.dtype)
+        self.model = AutoModel.from_pretrained(name, revision=revision, **dtype_kwarg(self.dtype))
         self.model.to(self.device).eval()
         self.revision = getattr(self.model.config, "_commit_hash", None) or revision
         self.padding: str | bool = "max_length" if "siglip" in name.lower() else True

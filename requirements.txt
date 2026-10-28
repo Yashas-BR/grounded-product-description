@@ -4,6 +4,7 @@ transformers>=4.45
 accelerate>=0.33
 datasets>=2.20
 bitsandbytes>=0.43
+sentencepiece>=0.2         # SigLIP tokenizer
 pillow>=10.0
 numpy>=1.24
 pandas>=2.0
