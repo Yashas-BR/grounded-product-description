@@ -285,3 +285,8 @@ last. Each entry: what, why, where.
     first Kaggle dev run reported an identical 3.09 GB for all four models
     because the counter was never reset and only GPU 0 was read; with
     `device_map="auto"` on T4 ×2 the sum is the single-T4 equivalent.
+5. **`run_info.json` is deep-merged when results come back from Kaggle**:
+   keys missing locally (e.g. LLM/VLM revisions, `system_merged`) are added,
+   local values win on conflict, and the remote environment snapshot is kept
+   under `remote_env`. The first dev run confirmed `system_merged = true` only
+   for LLaVA-1.5.

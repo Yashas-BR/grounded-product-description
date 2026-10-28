@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import zipfile
 
 from groundedgen import kaggle, utils
@@ -65,3 +66,18 @@ def test_kaggle_config_only_sets_paths():
     assert set(cfg) == {"project_dir", "code_dir", "hf_home"}
     assert cfg["project_dir"].startswith("/kaggle/working")
     assert cfg["hf_home"].startswith("/tmp")
+
+
+def test_run_info_is_merged_not_replaced(tmp_path):
+    local = _project(tmp_path / "local", [])
+    remote = _project(tmp_path / "remote", [])
+    utils.write_json(local / "outputs" / "run_info.json",
+                     {"env": {"platform": "Windows"}, "model_revisions": {"clip": "r1"}})
+    utils.write_json(remote / "outputs" / "run_info.json",
+                     {"env": {"platform": "Linux-kaggle"},
+                      "model_revisions": {"clip": "other", "qwen": "r2"}})
+    kaggle.merge_zip(kaggle.pack(remote, tmp_path / "r.zip"), local)
+    info = json.loads((local / "outputs" / "run_info.json").read_text(encoding="utf-8"))
+    assert info["model_revisions"] == {"clip": "r1", "qwen": "r2"}  # local wins, remote added
+    assert info["env"] == {"platform": "Windows"}
+    assert info["remote_env"]["Linux-kaggle"]["platform"] == "Linux-kaggle"

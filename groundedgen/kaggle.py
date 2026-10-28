@@ -16,6 +16,7 @@ JSONL files are unioned line by line (cached records are append-only).
 
 from __future__ import annotations
 
+import json
 import logging
 import shutil
 import tempfile
@@ -72,6 +73,22 @@ def _merge_jsonl(src: Path, dst: Path) -> int:
     return len(new)
 
 
+def _merge_run_info(src: Path, dst: Path) -> None:
+    """Add the other machine's model revisions etc. to ``run_info.json``.
+
+    Keys missing locally are added (recursively); on conflict the local value
+    stays, and the other side's environment snapshot is kept under ``remote_env``.
+    """
+    from groundedgen import utils
+
+    remote = json.loads(src.read_text(encoding="utf-8"))
+    local = json.loads(dst.read_text(encoding="utf-8"))
+    merged = utils._deep_merge(remote, local)
+    if "env" in remote and remote.get("env") != local.get("env"):
+        merged.setdefault("remote_env", {})[remote["env"].get("platform", "remote")] = remote["env"]
+    utils.write_json(dst, merged)
+
+
 def merge_tree(src_root: str | Path, dst_root: str | Path,
                dirs: Sequence[str] = PACKED_DIRS) -> dict[str, int]:
     """Merge one project tree into another (see module docstring)."""
@@ -88,6 +105,9 @@ def merge_tree(src_root: str | Path, dst_root: str | Path,
                 stats["copied"] += 1
             elif src.suffix == ".jsonl":
                 stats["jsonl_lines"] += _merge_jsonl(src, dst)
+            elif src.name == "run_info.json":
+                _merge_run_info(src, dst)
+                stats["kept"] += 1
             else:
                 stats["kept"] += 1  # destination wins for CSV/JSON (manifests, reports)
     return stats
