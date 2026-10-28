@@ -111,6 +111,11 @@ last. Each entry: what, why, where.
    `material_kappa_below_threshold`; a NaN kappa does not set it.
 8. **Material unknown share** is computed over items whose material gold is
    set (unresolved and unlabelled items are left out).
+9. **Annotation runs locally in JupyterLab** (Colab is unavailable). The
+   notebook detects Colab and otherwise works from the repo root with
+   `configs/local.yaml`; tested end to end in a browser on a scratch copy
+   (blocked incomplete save, CSV written, resume). Annotator instructions:
+   `ANNOTATING.md`.
 
 ## M4 — Extraction
 
