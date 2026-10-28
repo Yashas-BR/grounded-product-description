@@ -132,3 +132,17 @@ def test_build_ground_truth_writes_outputs(tmp_project):
     assert saved["counts"]["dev"]["material_unknown_share"] == pytest.approx(1 / 3)
     assert (tmp_project / "annotations" / "disagreements_dev.csv").exists()
     assert final.set_index("item_id").at["fpi_3", "gt_material"] == "denim"
+
+
+def test_adjudication_page_has_one_dropdown_per_disagreement(tmp_project):
+    (tmp_project / "annotations").mkdir(parents=True)
+    (tmp_project / "x.jpg").write_bytes(b"\xff\xd8fake")
+    for frame, name in ((A, "a"), (B, "b")):
+        frame.to_csv(annotate.annotation_path(tmp_project, "dev", name), index=False)
+    agreement.write_disagreements(agreement.disagreement_path(tmp_project, "dev"),
+                                  agreement.find_disagreements(A, B))
+    manifest = _manifest().assign(image_path="x.jpg")
+    page = agreement.write_adjudication_page(tmp_project, "dev", manifest).read_text(encoding="utf-8")
+    assert page.count("<select data-row=") == 2 and page.count("<figure>") == 2
+    assert '<option value="unknown">unknown</option>' in page  # material options
+    assert '"final_value": ""' in page and 'const SPLIT = "dev"' in page

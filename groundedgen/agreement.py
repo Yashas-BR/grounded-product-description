@@ -218,3 +218,118 @@ def build_ground_truth(
     manifest.to_csv(project_dir / "data" / "manifest_final.csv", index=False)
     utils.write_json(project_dir / "data" / "ground_truth_report.json", report)
     return manifest, report
+
+
+_PAGE_STYLE = """
+body{font:14px system-ui,sans-serif;margin:16px;background:#fcfcfb;color:#0b0b0b}
+h1{font-size:20px;margin:0 0 4px} .lead{color:#52514e;max-width:75ch}
+.bar{position:sticky;top:0;background:#fcfcfb;padding:8px 0;border-bottom:1px solid #e6e5e1;z-index:1}
+button{font:inherit;padding:8px 14px;border-radius:6px;border:1px solid #2a78d6;background:#2a78d6;color:#fff;cursor:pointer}
+.missing{outline:3px solid #e34948;border-radius:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:12px}
+figure{margin:0;border:1px solid #e6e5e1;border-radius:8px;padding:8px;background:#fff}
+img{width:100%;height:auto;border-radius:4px} .q{margin-top:8px} select{font:inherit;margin-top:2px}
+code{background:#f0efec;padding:0 4px;border-radius:3px}
+"""
+
+# Plain JS (no template literals or literal newlines inside strings, which broke
+# the first dev page). Answers autosave to localStorage, so a reload keeps them.
+_PAGE_SCRIPT = """
+const NL = String.fromCharCode(10);
+const KEY = "adjudication_" + SPLIT;
+const sels = [...document.querySelectorAll("select[data-row]")];
+const left = document.getElementById("left"), msg = document.getElementById("msg");
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+sels.forEach(s => { if (saved[s.dataset.row]) s.value = saved[s.dataset.row]; });
+function update() { left.textContent = sels.filter(s => !s.value).length; }
+sels.forEach(s => s.addEventListener("change", () => {
+  s.classList.remove("missing"); saved[s.dataset.row] = s.value;
+  try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+  update();
+}));
+update();
+document.getElementById("save").addEventListener("click", () => {
+  const missing = sels.filter(s => !s.value);
+  sels.forEach(s => s.classList.toggle("missing", !s.value));
+  if (missing.length) {
+    msg.textContent = missing.length + " question(s) still unanswered - marked in red.";
+    missing[0].scrollIntoView({behavior: "smooth", block: "center"});
+    return;
+  }
+  msg.textContent = "";
+  sels.forEach(s => ROWS[+s.dataset.row].final_value = s.value);
+  const cols = ["item_id", "attribute", "annotator_a", "annotator_b", "final_value"];
+  const csv = [cols.join(",")].concat(ROWS.map(r => cols.map(c => r[c]).join(","))).join(NL) + NL;
+  document.getElementById("out").hidden = false;
+  const box = document.getElementById("csv"); box.value = csv; box.scrollIntoView({block: "center"});
+  try {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv"}));
+    a.download = "disagreements_" + SPLIT + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+  } catch (e) { /* downloads blocked: the text box is the fallback */ }
+});
+document.getElementById("copy").addEventListener("click", () => {
+  const box = document.getElementById("csv"); box.select();
+  try { navigator.clipboard.writeText(box.value); } catch (e) { document.execCommand("copy"); }
+});
+"""
+
+
+def write_adjudication_page(project_dir: str | Path, split: str,
+                            manifest: pd.DataFrame | None = None) -> Path:
+    """Self-contained HTML page for filling ``disagreements_{split}.csv``.
+
+    One card per item (image embedded) with a dropdown per disagreement. The
+    page produces the filled CSV as a download and as copyable text.
+    """
+    import base64
+    import html
+    import json
+
+    project_dir = Path(project_dir)
+    sheet = read_disagreements(disagreement_path(project_dir, split))
+    if manifest is None:
+        manifest = pd.read_csv(project_dir / "data" / "manifest.csv", keep_default_na=False)
+    images = manifest.set_index("item_id")["image_path"]
+    a = read_annotations(annotation_path(project_dir, split, "a")).set_index("item_id")
+
+    rows = sheet[list(DISAGREEMENT_COLUMNS)].to_dict("records")
+    cards = []
+    for item_id, group in sheet.groupby("item_id", sort=False):
+        data = base64.b64encode((project_dir / images[item_id]).read_bytes()).decode()
+        questions = []
+        for idx, r in group.iterrows():
+            options = "".join(f'<option value="{v}">{v}</option>'
+                              for v in tx.gold_values(r["attribute"]))
+            questions.append(
+                f'<div class="q"><b>{r["attribute"]}</b>: a = <code>{html.escape(r["annotator_a"])}</code>, '
+                f'b = <code>{html.escape(r["annotator_b"])}</code><br><label>Final: '
+                f'<select data-row="{idx}"><option value="">choose…</option>{options}</select></label></div>')
+        category = html.escape(str(a["category"].get(item_id, "")))
+        cards.append(f'<figure><img src="data:image/jpeg;base64,{data}" alt="{item_id}">'
+                     f'<figcaption><b>{item_id}</b> · {category}{"".join(questions)}</figcaption></figure>')
+
+    out_csv = disagreement_path(project_dir, split).as_posix()
+    page = (
+        f'<!doctype html><meta charset="utf-8"><title>{split.title()} adjudication</title>'
+        f"<style>{_PAGE_STYLE}</style>"
+        f'<div class="bar"><h1>{split.title()} adjudication · {len(rows)} decisions on '
+        f'{sheet["item_id"].nunique()} items</h1>'
+        '<p class="lead">For each question, look at the image and choose what it actually shows, '
+        "using ANNOTATION_GUIDELINES.md v1.1 (material: keep a fabric only if you can point to the cue, "
+        "otherwise <code>unknown</code>). You may pick a value neither annotator chose. Answers are "
+        "saved in this browser as you go. When every question is answered, press the button, then "
+        f"paste the text into the Claude chat or save it as <code>{out_csv}</code>.</p>"
+        f'<button id="save">Finish (<span id="left">{len(rows)}</span> left)</button> <span id="msg"></span>'
+        '<div id="out" hidden><p><b>Done.</b> Copy the text below and paste it into the Claude chat '
+        "(or save it as the CSV file). A download may also have started.</p>"
+        '<textarea id="csv" rows="12" style="width:100%;font:12px monospace" readonly></textarea><br>'
+        '<button id="copy">Copy text</button></div></div>'
+        f'<div class="grid">{"".join(cards)}</div>'
+        f"<script>const SPLIT = {json.dumps(split)};\nconst ROWS = {json.dumps(rows)};\n"
+        f"{_PAGE_SCRIPT}</script>"
+    )
+    path = project_dir / "annotations" / f"{split}_adjudication.html"
+    path.write_text(page, encoding="utf-8")
+    return path

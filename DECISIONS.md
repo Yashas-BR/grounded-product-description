@@ -340,3 +340,24 @@ last. Each entry: what, why, where.
    whose evidence differs from what the current gold/extraction/thresholds
    give are dropped with their claims and judge records and regenerated. The
    first purge removed 34/40 C and 67/80 C-Mask dev records per LLM.
+4. **Judge-evidence purge**: A / A-F are judged against gold, so their judge
+   records from the first Kaggle run (metadata gold) went stale too.
+   `purge_stale` now also drops judge records whose `judge_evidence` differs
+   from what the judge would be shown now (136 dev records: 34 per A/A-F file).
+   They are re-judged on the next Kaggle run.
+
+## Test annotation (guidelines v1.1, frozen)
+
+1. **Agreement on test** (200 items, a and b independent): category kappa
+   1.00, color 0.86 (raw 0.87), **material 0.50 (95% CI 0.40–0.58; raw
+   0.60)**, below the 0.6 target. The guidelines were frozen before test, and
+   re-labelling test after seeing its disagreements would tune the labels on
+   the evaluation set, so test is not re-labelled. Deviation reported in the
+   paper with the CI; adjudication resolves every disagreement.
+2. Main source: whether a fabric is determinable at all. a chose `unknown`
+   54×, b 30×; b chose cotton 59×, a 36× (a-synthetic/b-cotton is the largest
+   cell, 20). When both named a fabric (138 items) they agreed on 71%.
+3. **Test adjudication** page: `agreement.write_adjudication_page` (now a
+   library function, with answers autosaved in the browser) →
+   `annotations/test_adjudication.html`, 106 decisions (80 material, 26
+   color) on 97 items.
