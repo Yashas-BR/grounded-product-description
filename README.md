@@ -68,8 +68,8 @@ every stage caches JSONL outputs and resumes where it stopped.
 | M5 | Generation: `models.py`, `prompts.py`, `generate.py`, notebook 02 | code done, tested with mock models; GPU run pending |
 | M6 | APG: `apg.py` (+ `claims.py` matcher) | done; fallback rate on real dev outputs pending GPU |
 | M7 | Claims and judge: `claims.py`, `judge.py` | code done; validation needs real outputs + hand labels |
-| M8 | Freeze prompt hashes and thresholds | |
-| M9 | Evaluation: `decompose.py`, notebook 03 | |
+| M8 | Freeze prompt hashes and thresholds | code done (`generate.freeze`); run after dev thresholds |
+| M9 | Evaluation: `decompose.py`, `analysis.py`, notebook 03 | code done, tested on synthetic data; needs test outputs |
 | M10 | Human evaluation: `human_eval.py`, notebook 04 | |
 | M11 | Paper assets: `analysis.py`, notebook 05 | |
 

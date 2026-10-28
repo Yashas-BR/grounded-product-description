@@ -216,11 +216,46 @@ def check_frozen(cfg: Mapping[str, Any], thresholds: Mapping[str, Mapping[str, f
     frozen = json.loads(path.read_text(encoding="utf-8"))
     if frozen.get("prompts") != prompts.freeze_record():
         raise RuntimeError("Prompts changed since they were frozen; test generation refused")
+    if set(frozen.get("thresholds", {})) != set(thresholds):
+        raise RuntimeError("Extractors with thresholds differ from frozen.json")
     for model, values in thresholds.items():
-        stored = frozen.get("thresholds", {}).get(model)
-        current = {a: (None if math.isinf(t) else t) for a, t in values.items()}
-        if stored != current:
+        stored = frozen["thresholds"][model]
+        if stored != _json_thresholds(values):
             raise RuntimeError(f"Thresholds for {model} differ from frozen.json")
+
+
+def _json_thresholds(values: Mapping[str, float]) -> dict[str, float | None]:
+    return {a: (None if math.isinf(t) else t) for a, t in values.items()}
+
+
+def freeze(cfg: Mapping[str, Any], overwrite: bool = False) -> dict[str, Any]:
+    """M8: write ``outputs/frozen.json`` with prompt hashes and dev thresholds.
+
+    Refuses if any extractor lacks dev thresholds, or if a frozen file already
+    exists (unless ``overwrite``; re-freezing after a test run would break the
+    protocol, so it must be deliberate). Only after this may test run.
+    """
+    path = frozen_path(cfg["project_dir"])
+    if path.exists() and not overwrite:
+        raise RuntimeError(f"{path} already exists; pass overwrite=True only if no test run happened")
+    thresholds = load_all_thresholds(cfg)
+    missing = [m for m in cfg["extraction"]["models"] if m not in thresholds]
+    if missing:
+        raise RuntimeError(f"No dev thresholds for {missing}; run the M4 evaluation first")
+    summary_path = utils.project_path(cfg, "outputs", "extraction", "evaluation.json")
+    primary = None
+    if summary_path.exists():
+        primary = json.loads(summary_path.read_text(encoding="utf-8")).get("primary_extractor")
+    record = {
+        "prompts": prompts.freeze_record(),
+        "thresholds": {m: _json_thresholds(v) for m, v in thresholds.items()},
+        "primary_extractor": primary,
+        "git_commit": utils.git_commit(),
+        "created": utils.utc_now(),
+    }
+    utils.write_json(path, record)
+    utils.update_run_info(utils.project_path(cfg, "outputs", "run_info.json"), {"frozen": record})
+    return record
 
 
 def load_extraction(cfg: Mapping[str, Any], extractor: str, split: str) -> dict[str, dict]:
@@ -347,11 +382,16 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument("configs", nargs="*", help="YAML files merged over the default")
     parser.add_argument("--split", default="dev", choices=["dev", "test"])
     parser.add_argument("--conditions", nargs="+", default=list(CONDITIONS), choices=CONDITIONS)
+    parser.add_argument("--freeze", action="store_true",
+                        help="M8: write outputs/frozen.json (prompt hashes, dev thresholds) and exit")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     cfg = utils.load_config(extra_paths=args.configs)
     utils.apply_runtime_env(cfg)
     utils.set_seed(cfg["seed"])
+    if args.freeze:
+        print(json.dumps(freeze(cfg), indent=2))
+        return
     summary = run_matrix(cfg, args.split, args.conditions)
     print(json.dumps(summary, indent=2))
 

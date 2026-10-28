@@ -250,3 +250,34 @@ last. Each entry: what, why, where.
 4. **T4 ×2, not P100**: bitsandbytes 4-bit kernels are not reliable on Pascal
    GPUs. With two T4s, `device_map="auto"` may split a model across both;
    the 15 GB check reads device 0.
+
+## M8 — Freeze
+
+1. **`generate.freeze(cfg)`** (or `python -m groundedgen.generate configs/local.yaml --freeze`)
+   writes `outputs/frozen.json` with every template hash, per-condition
+   hashes, the dev thresholds of *every* extractor, the primary extractor and
+   the git commit. It refuses if an extractor has no thresholds or the file
+   already exists. `check_frozen` also requires the same set of extractors.
+
+## M9 — Evaluation
+
+1. **A fifth outcome, `silent`**: for A/A-F with gold `unknown` and nothing
+   stated. The spec's four outcomes leave this case undefined; it is neither
+   an error nor an abstention against evidence.
+2. **A correct statement after a gap** (e unknown, D = {g}) counts as correct
+   but still counts toward leakage, and is not "lucky" (lucky needs label
+   evidence).
+3. **Leakage in C-Mask** uses the masked attribute only; non-masked pairs of
+   C-Mask still enter HR, coverage and precision.
+4. **Planned McNemar tests**: A and A-F use the primary VLM; text conditions use
+   the family's LLM and the primary extractor. Items are paired on
+   (item, attribute); C-Mask is not in any family.
+5. **The origin test** (RQ1) uses B with the primary extractor against C, per LLM
+   and attribute.
+6. **`analysis.py` holds the M9 tables and figures** (T3, T4, T5, T7, F3, F4) and a
+   first `numbers.json`; M11 extends it. Dev runs write `*_dev` files; test
+   runs need `frozen.json`.
+7. **Figure style**: reference categorical palette in fixed order (validated
+   for CVD: worst adjacent ΔE 9.1); slots below 3:1 contrast get direct labels
+   (F4) or a legend plus table view (F3, with T4). F4 merges labels of points
+   closer than 0.04.
