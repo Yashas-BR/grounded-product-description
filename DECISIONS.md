@@ -299,3 +299,9 @@ last. Each entry: what, why, where.
     keep their hue) without changing the v1.0 text. Round-1 labels, the
     disagreement sheet and the derived gold are archived in
     `annotations/dev_round1/`; both annotators re-label dev independently.
+11. **Round-2 re-check of cotton/synthetic.** Round 2 reached material kappa
+    0.71 but neither annotator used `unknown` (0/40). Before adjudication, each
+    annotator independently revisits only their own cotton/synthetic labels
+    (`annotate.recheck_items`, notebook "Re-check" cell) and keeps a fabric only
+    if the cue is visible. Kappa is recomputed afterwards; both values are
+    reported.

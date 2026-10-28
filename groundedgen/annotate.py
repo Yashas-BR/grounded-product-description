@@ -84,10 +84,10 @@ class AnnotationSession:
         store: where labels are saved.
     """
 
-    def __init__(self, items: pd.DataFrame, store: AnnotationStore):
+    def __init__(self, items: pd.DataFrame, store: AnnotationStore, start_at_first: bool = False):
         self.items = items.reset_index(drop=True)
         self.store = store
-        self.index = self.first_unannotated()
+        self.index = 0 if start_at_first else self.first_unannotated()
 
     def __len__(self) -> int:
         return len(self.items)
@@ -147,14 +147,28 @@ class AnnotationSession:
         self.next()
 
 
+def recheck_items(project_dir: str | Path, split: str, annotator: str,
+                  materials: tuple[str, ...] = ("cotton", "synthetic")) -> list[str]:
+    """Item ids this annotator labelled with one of ``materials``.
+
+    Used for a re-check pass: each annotator revisits only their own doubtful
+    labels (garment type is not a cue; keep a fabric only if the cue is visible).
+    """
+    frame = read_annotations(annotation_path(project_dir, split, annotator))
+    return frame.loc[frame["material"].isin(materials), "item_id"].tolist()
+
+
 # --------------------------------------------------------------------------
 # Widget UI (Colab)
 # --------------------------------------------------------------------------
 
-def launch(cfg: Mapping[str, Any], split: str, annotator: str):
-    """Show the annotation form for ``split`` and ``annotator`` in Colab.
+def launch(cfg: Mapping[str, Any], split: str, annotator: str,
+           item_ids: list[str] | None = None):
+    """Show the annotation form for ``split`` and ``annotator``.
 
-    Returns the ``AnnotationSession`` so progress can be inspected.
+    With ``item_ids`` only those items are shown, starting from the first
+    (re-check mode). Returns the ``AnnotationSession`` so progress can be
+    inspected.
     """
     import ipywidgets as w
     from IPython.display import display
@@ -170,8 +184,10 @@ def launch(cfg: Mapping[str, Any], split: str, annotator: str):
 
     project_dir = Path(cfg["project_dir"])
     items = data.load_manifest(cfg, splits=[split])
+    if item_ids is not None:
+        items = items[items["item_id"].isin(item_ids)]
     store = AnnotationStore(annotation_path(project_dir, split, annotator), annotator)
-    session = AnnotationSession(items, store)
+    session = AnnotationSession(items, store, start_at_first=item_ids is not None)
 
     image = w.Image(format="jpeg", width=320)
     header = w.HTML()

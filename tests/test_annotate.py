@@ -70,3 +70,20 @@ def test_session_skip_and_bounds(tmp_path):
     session.skip()
     session.skip()
     assert session.index == 1 and session.n_done == 0
+
+
+def test_recheck_items_and_start_at_first(tmp_path):
+    path = annotate.annotation_path(tmp_path, "dev", "a")
+    store = annotate.AnnotationStore(path, "a")
+    for i, mat in enumerate(["cotton", "denim", "synthetic", "unknown"]):
+        store.save(f"fpi_{i}", LABELS | {"material": mat})
+    ids = annotate.recheck_items(tmp_path, "dev", "a")
+    assert ids == ["fpi_0", "fpi_2"]
+    assert annotate.recheck_items(tmp_path, "dev", "b") == []  # other annotator untouched
+    items = _items()
+    session = annotate.AnnotationSession(items[items["item_id"].isin(ids)],
+                                         annotate.AnnotationStore(path, "a"), start_at_first=True)
+    assert len(session) == 2 and session.index == 0
+    assert session.prefill()["material"] == "cotton"  # shows own saved label
+    session.save_and_next(session.prefill() | {"material": "unknown"})
+    assert annotate.read_annotations(path).set_index("item_id").at["fpi_0", "material"] == "unknown"
