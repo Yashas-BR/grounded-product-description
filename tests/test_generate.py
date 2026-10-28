@@ -248,3 +248,31 @@ def test_apg_records_are_rendered_by_the_real_renderer(project, tmp_project):
         assert r["text"] == "This kurta comes in red."
         assert r["apg"]["sentences_dropped_verify"] == 1 and not r["apg"]["fallback_used"]
         assert "{category}" in r["raw_output"] and "{category}" in r["apg"]["raw_with_slots"]
+
+
+def test_purge_stale_drops_outdated_evidence_and_its_claims(project, monkeypatch, tmp_project):
+    from groundedgen import claims, judge
+
+    _run(project, monkeypatch, [], conditions=["C"])
+    path = generate.generation_path(tmp_project, "C", "llm/one")
+    claims.run_claims(tmp_project, path)
+    utils.write_jsonl(judge.judge_path(tmp_project, path),
+                      [{**{k: r[k] for k in generate.CACHE_KEY}, "claims": []}
+                       for r in utils.read_jsonl(path)])
+    # Gold changes after annotation: fpi_1 material silk -> cotton.
+    manifest = _manifest()
+    manifest.loc[manifest["item_id"] == "fpi_1", "gt_material"] = "cotton"
+    manifest.to_csv(tmp_project / "data" / "manifest_final.csv", index=False)
+
+    dropped = generate.purge_stale(project, "dev")
+    other = generate.generation_path(tmp_project, "C", "llm/two")
+    assert dropped == {str(path): 1, str(other): 1}  # stale for both LLMs
+    assert {r["item_id"] for r in utils.read_jsonl(path)} == {"fpi_2", "fpi_3"}
+    for side in (claims.claims_path(tmp_project, path), judge.judge_path(tmp_project, path)):
+        assert {r["item_id"] for r in utils.read_jsonl(side)} == {"fpi_2", "fpi_3"}
+    # The next run regenerates only the purged record, with the new evidence.
+    summary = _run(project, monkeypatch, [], conditions=["C"])
+    assert summary["new_records"][str(path)] == 1
+    rec = next(r for r in utils.read_jsonl(path) if r["item_id"] == "fpi_1")
+    assert rec["evidence"]["material"] == "cotton"
+    assert generate.purge_stale(project, "dev") == {}

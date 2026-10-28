@@ -242,10 +242,12 @@ def freeze(cfg: Mapping[str, Any], overwrite: bool = False) -> dict[str, Any]:
     missing = [m for m in cfg["extraction"]["models"] if m not in thresholds]
     if missing:
         raise RuntimeError(f"No dev thresholds for {missing}; run the M4 evaluation first")
-    summary_path = utils.project_path(cfg, "outputs", "extraction", "evaluation.json")
     primary = None
-    if summary_path.exists():
-        primary = json.loads(summary_path.read_text(encoding="utf-8")).get("primary_extractor")
+    for name in ("dev_tuning.json", "evaluation.json"):  # chosen on dev either way
+        summary_path = utils.project_path(cfg, "outputs", "extraction", name)
+        if summary_path.exists():
+            primary = json.loads(summary_path.read_text(encoding="utf-8")).get("primary_extractor")
+            break
     record = {
         "prompts": prompts.freeze_record(),
         "thresholds": {m: _json_thresholds(v) for m, v in thresholds.items()},
@@ -299,6 +301,50 @@ def text_jobs(cfg: Mapping[str, Any], items: pd.DataFrame, split: str,
     return out
 
 
+def purge_stale(cfg: Mapping[str, Any], split: str) -> dict[str, int]:
+    """Drop text-condition records whose evidence no longer matches the current
+    gold labels, extraction or thresholds (e.g. C generated before annotation).
+
+    Cache keys do not include the evidence, so without this a stale record
+    would count as finished forever. Matching claims and judge records are
+    dropped too, so everything downstream is recomputed. Records of other
+    splits are untouched. Returns the number of records dropped per file.
+    """
+    from groundedgen import claims as claims_mod
+    from groundedgen import data, judge as judge_mod
+
+    items = data.load_manifest(cfg, splits=[split])
+    ids = set(items["item_id"])
+    plan = text_jobs(cfg, items, split, [c for c in CONDITIONS if c not in VLM_CONDITIONS],
+                     load_all_thresholds(cfg))
+    dropped: dict[str, int] = {}
+    for condition, extractor, jobs in plan:
+        for role in ("primary", "secondary"):
+            name = cfg["generation"]["llms"][role]
+            path = generation_path(cfg["project_dir"], condition, name, extractor)
+            if not path.exists():
+                continue
+            expected = {j.key(name): dict(j.evidence) for j in jobs}
+            keep, stale = [], set()
+            for r in utils.read_jsonl(path):
+                key = utils.record_key(r, CACHE_KEY)
+                if r["item_id"] in ids and expected.get(key) != r.get("evidence"):
+                    stale.add(key)
+                else:
+                    keep.append(r)
+            if not stale:
+                continue
+            utils.write_jsonl(path, keep)
+            for side in (claims_mod.claims_path(cfg["project_dir"], path),
+                         judge_mod.judge_path(cfg["project_dir"], path)):
+                if side.exists():
+                    utils.write_jsonl(side, [r for r in utils.read_jsonl(side)
+                                             if utils.record_key(r, CACHE_KEY) not in stale])
+            dropped[str(path)] = len(stale)
+            LOGGER.info("Purged %d stale %s records from %s", len(stale), split, path.name)
+    return dropped
+
+
 def run_matrix(
     cfg: Mapping[str, Any],
     split: str,
@@ -321,10 +367,12 @@ def run_matrix(
     if split == "test":
         check_frozen(cfg, thresholds)
     project_dir = cfg["project_dir"]
+    stale = purge_stale(cfg, split)
     items = data.load_manifest(cfg, splits=[split])
     gen_cfg = cfg["generation"]
     run_info = utils.project_path(cfg, "outputs", "run_info.json")
-    summary: dict[str, Any] = {"split": split, "new_records": {}, "peak_gpu_gb": {}}
+    summary: dict[str, Any] = {"split": split, "purged_stale": stale, "new_records": {},
+                               "peak_gpu_gb": {}}
 
     def finish(generator: Generator) -> None:
         utils.update_run_info(run_info, {

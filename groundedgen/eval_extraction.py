@@ -213,34 +213,59 @@ def plot_f2(results: Mapping[str, Mapping[str, Mapping[str, Any]]], out_dir: str
     plt.close(fig)
 
 
-def run_evaluation(cfg: Mapping[str, Any], manifest: pd.DataFrame) -> dict[str, Any]:
-    """Tune thresholds on dev, evaluate on test, write thresholds, T2 and F2.
+def tune_on_dev(cfg: Mapping[str, Any], manifest: pd.DataFrame) -> dict[str, Any]:
+    """Tune and save thresholds on dev, pick the primary extractor, and report
+    dev metrics. Touches no test data, so it can run before test annotation.
 
-    Expects ``outputs/extraction/{model}/{dev,test}.jsonl`` for every model in
-    ``cfg["extraction"]["models"]``.
+    Writes ``thresholds.json`` per model and ``outputs/extraction/dev_tuning.json``.
     """
     project_dir = Path(cfg["project_dir"])
     target = cfg["extraction"]["threshold_rule"]["target_accuracy"]
     boot = dict(n_resamples=cfg["metrics"]["bootstrap_resamples"],
                 ci=cfg["metrics"]["ci_level"], seed=cfg["metrics"]["seed"])
-    results: dict[str, Any] = {}
+    thresholds: dict[str, dict[str, float]] = {}
     dev_material_aurc: dict[str, float] = {}
+    dev_results: dict[str, Any] = {}
     for model in cfg["extraction"]["models"]:
         dev = scored_pairs(utils.read_jsonl(extract.extraction_path(project_dir, model, "dev")),
                            manifest[manifest["split"] == "dev"])
-        thresholds = tune_thresholds(dev, target)
-        save_thresholds(thresholds_path(project_dir, model), thresholds)
+        thresholds[model] = tune_thresholds(dev, target)
+        save_thresholds(thresholds_path(project_dir, model), thresholds[model])
         mat = dev[dev["attribute"] == "material"]
         dev_material_aurc[model] = metrics.risk_coverage(mat["confidence"], mat["correct"]).aurc
+        dev_results[model] = evaluate_model(dev, thresholds[model], **boot)
+    summary = {
+        "primary_extractor": primary_extractor(dev_material_aurc),
+        "dev_material_aurc": dev_material_aurc,
+        "thresholds": {m: {a: (None if math.isinf(t) else t) for a, t in v.items()}
+                       for m, v in thresholds.items()},
+        "dev_results": dev_results,
+    }
+    utils.write_json(project_dir / "outputs" / "extraction" / "dev_tuning.json", summary)
+    return summary
+
+
+def run_evaluation(cfg: Mapping[str, Any], manifest: pd.DataFrame) -> dict[str, Any]:
+    """Tune thresholds on dev, evaluate on test, write thresholds, T2 and F2.
+
+    Expects ``outputs/extraction/{model}/{dev,test}.jsonl`` for every model in
+    ``cfg["extraction"]["models"]``. Run it once test gold exists.
+    """
+    project_dir = Path(cfg["project_dir"])
+    boot = dict(n_resamples=cfg["metrics"]["bootstrap_resamples"],
+                ci=cfg["metrics"]["ci_level"], seed=cfg["metrics"]["seed"])
+    tuned = tune_on_dev(cfg, manifest)
+    results: dict[str, Any] = {}
+    for model in cfg["extraction"]["models"]:
         test = scored_pairs(utils.read_jsonl(extract.extraction_path(project_dir, model, "test")),
                             manifest[manifest["split"] == "test"])
+        thresholds = load_thresholds(thresholds_path(project_dir, model))
         results[model] = evaluate_model(test, thresholds, **boot)
 
-    primary = primary_extractor(dev_material_aurc)
     analysis_dir = project_dir / "outputs" / "analysis"
     write_table(table_t2(results), analysis_dir, "T2_extraction")
     plot_f2(results, analysis_dir)
-    summary = {"primary_extractor": primary, "dev_material_aurc": dev_material_aurc,
-               "results": results}
+    summary = {"primary_extractor": tuned["primary_extractor"],
+               "dev_material_aurc": tuned["dev_material_aurc"], "results": results}
     utils.write_json(project_dir / "outputs" / "extraction" / "evaluation.json", summary)
     return summary

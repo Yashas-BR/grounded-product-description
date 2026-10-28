@@ -240,7 +240,10 @@ def run_evaluation(cfg: Mapping[str, Any], split: str = "test") -> dict[str, Any
     out_dir = project_dir / "outputs" / "analysis"
     summary_path = project_dir / "outputs" / "extraction" / "evaluation.json"
     extraction_summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else None
-    primary_extractor = (extraction_summary or {}).get("primary_extractor") or cfg["extraction"]["models"][0]
+    tuning_path = project_dir / "outputs" / "extraction" / "dev_tuning.json"
+    tuning = json.loads(tuning_path.read_text(encoding="utf-8")) if tuning_path.exists() else {}
+    primary_extractor = ((extraction_summary or {}).get("primary_extractor")
+                         or tuning.get("primary_extractor") or cfg["extraction"]["models"][0])
     llms = [cfg["generation"]["llms"][r] for r in ("primary", "secondary")]
     vlm = cfg["generation"]["vlms"]["primary"]
 

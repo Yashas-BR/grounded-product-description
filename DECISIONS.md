@@ -321,3 +321,22 @@ last. Each entry: what, why, where.
     labels, a dropdown of all allowed values), which writes the filled
     `disagreements_dev.csv`. The adjudicator is a third team member and may
     choose a value neither annotator chose.
+
+## Dev gold and thresholds (after adjudication)
+
+1. **Dev gold**: 40/40 items annotated, 0 unresolved after adjudication (the
+   adjudicator sided with a 9×, b 11×, and chose a third value once). Material
+   gold: 8/40 `unknown` (20%).
+2. **Dev thresholds without touching test**: `eval_extraction.tune_on_dev`
+   tunes and saves thresholds, picks the primary extractor and reports dev
+   metrics (`outputs/extraction/dev_tuning.json`). `run_evaluation` (T2, F2 on
+   test) runs only once test gold exists. Primary extractor: SigLIP (dev
+   material AURC 0.53 vs CLIP 0.85). Material thresholds: CLIP ∞ (always
+   abstain), SigLIP 0.986 (3% coverage), i.e. B-Abs/APG almost always receive
+   `unknown` material.
+3. **Stale-evidence purge** (`generate.purge_stale`, run at the start of every
+   `run_matrix`): cache keys do not include evidence, so C/C-Mask records made
+   with pre-annotation (metadata) gold would otherwise be kept forever. Records
+   whose evidence differs from what the current gold/extraction/thresholds
+   give are dropped with their claims and judge records and regenerated. The
+   first purge removed 34/40 C and 67/80 C-Mask dev records per LLM.

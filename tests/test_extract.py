@@ -236,3 +236,20 @@ def test_run_evaluation_writes_thresholds_t2_f2(tmp_project):
     t2 = pd.read_csv(analysis / "T2_extraction.csv")
     assert len(t2) == 6 and "booktabs" not in t2.columns
     assert r"\toprule" in (analysis / "T2_extraction.tex").read_text(encoding="utf-8")
+
+
+def test_tune_on_dev_touches_no_test_data(tmp_project):
+    cfg = utils.load_config(overrides={
+        "project_dir": str(tmp_project), "extraction": {"models": ["a/clip", "b/siglip"]},
+        "metrics": {"bootstrap_resamples": 50}})
+    dev = _manifest(30, "dev")
+    for k, model in enumerate(cfg["extraction"]["models"]):
+        utils.write_jsonl(extract.extraction_path(tmp_project, model, "dev"),
+                          _synthetic_records(dev, model, seed=k))
+    summary = ev.tune_on_dev(cfg, dev)   # no test extraction files exist at all
+    assert summary["primary_extractor"] in cfg["extraction"]["models"]
+    assert set(summary["dev_results"]) == set(cfg["extraction"]["models"])
+    for model in cfg["extraction"]["models"]:
+        assert ev.thresholds_path(tmp_project, model).exists()
+    assert (tmp_project / "outputs" / "extraction" / "dev_tuning.json").exists()
+    assert not (tmp_project / "outputs" / "analysis").exists()  # no T2/F2 yet
