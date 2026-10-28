@@ -182,3 +182,28 @@ last. Each entry: what, why, where.
     "Question: {system} {user} Answer:" and counts as a merged system prompt.
 12. **Not yet verified on a GPU**: model loading, batching and the 15 GB peak
     memory criterion. The local machine has no GPU and Colab is unavailable.
+
+## M6 — APG (and the claims matcher it needs)
+
+1. **`claims.py` attribute matching was built in M6**, ahead of M7, because
+   APG's verify step runs the claim extractor. The judge stays in M7.
+2. **Hyphens between letters are matched as spaces** ("navy-blue" →
+   "navy blue", "off-white" → "off white", "t-shirt" → "t shirt"), which gives
+   the spec's hyphenated-compound rule while keeping spans aligned with the
+   original text. Lexicon forms and exclusion phrases are normalised the same way.
+3. **Plurals** are an optional "s"/"es" on any surface form.
+4. **A styling clause starts at the earliest trigger in a sentence.**
+5. **APG verification checks every counted mention**, not only the first
+   category mention, so a kept sentence agrees with the evidence however it is
+   read. Mentions inside styling clauses are ignored, as in evaluation.
+6. **Prune also drops sentences with a stray `{` or `}`** (e.g. an unclosed
+   `{category`), so no raw placeholder can survive.
+7. **Fallback when only material is known** (category and color unknown):
+   "This piece is made of {material}." The spec covers the other cases only.
+8. **Plural-only garments** (jeans, trousers, shorts; `taxonomy.PLURAL_CATEGORIES`):
+   "a {category}" fills as "a pair of jeans", and the fallback takes no article
+   ("Blue jeans in denim.").
+9. **`placeholders_used`** lists the distinct slots in sentences that survive
+   verification.
+10. **The section 9 property is tested on 28 hand-written adversarial outputs
+    plus 3,000 seeded random outputs** (`tests/test_apg.py`).

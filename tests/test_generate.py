@@ -226,3 +226,25 @@ def test_frozen_check_detects_changes(project, tmp_project):
     utils.write_json(generate.frozen_path(tmp_project), frozen)
     with pytest.raises(RuntimeError, match="Prompts changed"):
         generate.check_frozen(project, thresholds)
+
+
+class SlotGenerator(MockGenerator):
+    """Writes APG-style output with slots and one unslotted fabric guess."""
+
+    def generate(self, chat):
+        return ["Description: This {category} comes in {color}. Made of pure cotton."
+                for _ in chat]
+
+
+def test_apg_records_are_rendered_by_the_real_renderer(project, tmp_project):
+    generate.run_matrix(project, "dev", conditions=["APG"],
+                        load_text=lambda name: SlotGenerator(name, []),
+                        load_vision=lambda name: None)
+    records = utils.read_jsonl(generate.generation_path(tmp_project, "APG", "llm/one", "a/clip"))
+    assert len(records) == 3
+    for r in records:
+        # extraction: kurta 0.9, red 0.6, cotton 0.3; thresholds 0.5 / 0.5 / inf
+        assert r["evidence"] == {"category": "kurta", "color": "red", "material": "unknown"}
+        assert r["text"] == "This kurta comes in red."
+        assert r["apg"]["sentences_dropped_verify"] == 1 and not r["apg"]["fallback_used"]
+        assert "{category}" in r["raw_output"] and "{category}" in r["apg"]["raw_with_slots"]

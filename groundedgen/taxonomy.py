@@ -50,6 +50,8 @@ CATEGORY_DESCRIPTIONS: Mapping[str, str] = MappingProxyType(
 )
 #: Ethnic-wear group used for stratified analysis (T7).
 ETHNIC_CATEGORIES: frozenset[str] = frozenset({"kurta", "saree"})
+#: Plural-only garment nouns ("a pair of jeans", never "a jeans"); used by APG.
+PLURAL_CATEGORIES: frozenset[str] = frozenset({"jeans", "trousers", "shorts"})
 
 # --------------------------------------------------------------------------
 # Color: raw baseColour (case-insensitive) -> 12 basic terms
