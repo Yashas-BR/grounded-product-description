@@ -1,0 +1,7 @@
+# Overrides for Kaggle GPU notebooks (notebooks/kaggle_gpu.ipynb).
+# /kaggle/working is saved as notebook output; model downloads go to /tmp so
+# they are not saved with it.
+
+project_dir: /kaggle/working/grounded-hallucination
+code_dir: /kaggle/working/ghd
+hf_home: /tmp/hf_cache

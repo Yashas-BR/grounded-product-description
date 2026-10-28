@@ -231,3 +231,22 @@ last. Each entry: what, why, where.
    Human–human Cohen's kappa is computed per description on "has at least one
    non-subjective unsupported claim", because claim-level spans have no fixed
    unit to compare.
+
+## GPU host — Kaggle
+
+1. **GPU stages run on Kaggle** (T4 ×2), because Colab will not assign a
+   backend from our location and the laptop has no GPU. `notebooks/kaggle_gpu.ipynb`
+   runs generation, claims and the judge for one split; `KAGGLE.md` is the
+   step-by-step guide. Notebooks 01/02 still work on Colab where available.
+2. **Project state moves as zips** (`groundedgen/kaggle.py`): `pack` zips
+   data, annotations and outputs; `restore` merges every copy under
+   `/kaggle/input` (the uploaded dataset plus any earlier run outputs) into the
+   writable `/kaggle/working/grounded-hallucination`; `merge` brings a
+   downloaded results zip back. Missing files are copied, JSONL files are
+   unioned line by line, and for other existing files the destination wins,
+   so no finished record is ever lost or duplicated.
+3. **`configs/kaggle.yaml`** puts model downloads in `/tmp/hf_cache` so the
+   multi-GB checkpoints are not saved as notebook output.
+4. **T4 ×2, not P100**: bitsandbytes 4-bit kernels are not reliable on Pascal
+   GPUs. With two T4s, `device_map="auto"` may split a model across both;
+   the 15 GB check reads device 0.

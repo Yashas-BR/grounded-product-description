@@ -39,6 +39,8 @@ loader that streams the dataset instead of caching it:
 python -m groundedgen.data configs/local.yaml
 ```
 
+GPU stages (generation, judge) run on Kaggle: see [KAGGLE.md](KAGGLE.md).
+
 Gated checkpoints (Mistral) need an `HF_TOKEN` in Colab secrets; it is never
 written to disk or logs.
 
