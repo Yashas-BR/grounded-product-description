@@ -56,3 +56,19 @@ def test_render_chat_without_system():
 
 def test_generator_slug():
     assert models.generator_slug("Qwen/Qwen2.5-7B-Instruct") == "Qwen__Qwen2.5-7B-Instruct"
+
+
+def test_reset_peak_memory_skips_uninitialised_cuda(monkeypatch):
+    # Kaggle's torch raises "Invalid device argument" if CUDA isn't initialised yet.
+    import torch
+
+    def boom(device=None):
+        raise RuntimeError("Invalid device argument")
+
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "device_count", lambda: 2)
+    monkeypatch.setattr(torch.cuda, "reset_peak_memory_stats", boom)
+    monkeypatch.setattr(torch.cuda, "is_initialized", lambda: False)
+    models.reset_peak_memory()
+    monkeypatch.setattr(torch.cuda, "is_initialized", lambda: True)
+    models.reset_peak_memory()  # still swallowed after initialisation

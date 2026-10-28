@@ -138,9 +138,14 @@ def reset_peak_memory() -> None:
         import torch
     except ImportError:
         return
-    if torch.cuda.is_available():
+    # Before CUDA is initialised the counters are zero, and newer torch raises
+    # "Invalid device argument" when asked to reset them.
+    if torch.cuda.is_available() and torch.cuda.is_initialized():
         for device in range(torch.cuda.device_count()):
-            torch.cuda.reset_peak_memory_stats(device)
+            try:
+                torch.cuda.reset_peak_memory_stats(device)
+            except RuntimeError as exc:
+                LOGGER.debug("Could not reset peak memory on GPU %d: %s", device, exc)
 
 
 def peak_gpu_gb() -> float | None:
