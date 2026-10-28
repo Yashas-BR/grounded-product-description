@@ -63,7 +63,7 @@ every stage caches JSONL outputs and resumes where it stopped.
 | M2 | Data: `data.py`, notebook 01 part 1 | done (run locally) |
 | M3 | Annotation: `annotate.py`, `agreement.py`, guidelines, `notebooks/annotation.ipynb` | tool ready locally ([ANNOTATING.md](ANNOTATING.md)); labelling pending |
 | M4 | Extraction: `extract.py`, `eval_extraction.py` | models run on dev+test; thresholds, T2, F2 wait for annotated gold |
-| M5 | Generation: `models.py`, `prompts.py`, `generate.py` | |
+| M5 | Generation: `models.py`, `prompts.py`, `generate.py`, notebook 02 | code done, tested with mock models; GPU run pending |
 | M6 | APG: `apg.py` | |
 | M7 | Claims and judge: `claims.py`, `judge.py` | |
 | M8 | Freeze prompt hashes and thresholds | |

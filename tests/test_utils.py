@@ -106,3 +106,15 @@ def test_apply_runtime_env_sets_hf_home_once(tmp_path, monkeypatch):
     assert (tmp_path / "cache").is_dir()
     utils.apply_runtime_env({"hf_home": str(tmp_path / "other")})  # existing value wins
     assert os.environ["HF_HOME"] == str(tmp_path / "cache")
+
+
+def test_load_hf_token_uses_environment_without_writing(tmp_path, monkeypatch):
+    monkeypatch.setenv("HF_TOKEN", "hf_test_value")
+    monkeypatch.chdir(tmp_path)
+    assert utils.load_hf_token()
+    assert list(tmp_path.iterdir()) == []  # nothing written
+
+
+def test_load_hf_token_missing(monkeypatch):
+    monkeypatch.delenv("HF_TOKEN", raising=False)
+    assert utils.load_hf_token() is False

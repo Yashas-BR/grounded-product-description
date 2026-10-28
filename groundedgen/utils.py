@@ -97,6 +97,40 @@ def apply_runtime_env(cfg: Mapping[str, Any]) -> None:
         os.environ["HF_HOME"] = str(hf_home)
 
 
+def load_hf_token() -> bool:
+    """Put a Hugging Face token into ``HF_TOKEN`` for gated models (Mistral).
+
+    Sources, in order: an existing ``HF_TOKEN``, Colab secrets, Kaggle
+    secrets. The token is only placed in the process environment; it is never
+    written to disk or logged. Returns whether a token is available.
+    """
+    if os.environ.get("HF_TOKEN"):
+        return True
+    readers = []
+    try:
+        from google.colab import userdata  # type: ignore
+
+        readers.append(lambda: userdata.get("HF_TOKEN"))
+    except ImportError:
+        pass
+    try:
+        from kaggle_secrets import UserSecretsClient  # type: ignore
+
+        readers.append(lambda: UserSecretsClient().get_secret("HF_TOKEN"))
+    except ImportError:
+        pass
+    for read in readers:
+        try:
+            token = read()
+        except Exception:  # secret missing or access not granted
+            continue
+        if token:
+            os.environ["HF_TOKEN"] = token
+            return True
+    LOGGER.warning("No HF_TOKEN found; gated models (Mistral) will fail to load")
+    return False
+
+
 def project_path(cfg: Mapping[str, Any], *parts: str) -> Path:
     """Path under ``cfg["project_dir"]`` (data, annotations and outputs live there)."""
     return Path(cfg["project_dir"]).joinpath(*parts)

@@ -146,3 +146,39 @@ last. Each entry: what, why, where.
     stalled at 1.48 of 3.5 GB; resuming with `HF_HUB_DISABLE_XET=1` (plain
     HTTP) finished in under 5 minutes. Revisions used: CLIP
     `32bd6428…`, SigLIP `9fdffc58…` (full hashes in `outputs/run_info.json`).
+
+## M5 — Generation
+
+1. **Prompt line breaks.** The PDF wraps prompt lines; each paragraph is one
+   line, with a newline after "Product attributes:" and a blank line between
+   the evidence JSON and the instruction. `prompts.py`.
+2. **APG prompt when category is unknown** replaces the `{category}` clause
+   with "Use each placeholder at most once, and refer to the product as
+   \"this piece\"."; with **no known attribute** no slots are offered and the
+   text only says to refer to "this piece". `prompts.apg_user`.
+3. **The judge prompt lives in `prompts.py`** with the generation templates,
+   so every prompt is hashed and frozen together.
+4. **`prompt_sha256` per record** is one hash over the templates the condition
+   uses (`prompts.condition_sha256`); per-template hashes go in `frozen.json`.
+5. **A chat template "rejects" the system role** if it raises *or* silently
+   drops the system text. Then the system text is prepended to the user
+   message and the generator logs `system_merged` in `run_info.json`. Checked
+   on the real templates: Qwen2.5-7B and Qwen2-VL keep the system message;
+   Mistral-7B-v0.3 accepts it (placed in the user turn); **LLaVA-1.5 drops it,
+   so A-F on LLaVA uses the merged form.**
+6. **Output cleaning** strips whitespace, matching outer quotes (straight or
+   curly) and a leading "Description:" / "Product description:" /
+   "Description for …:" label, optionally in `**bold**`; up to 3 passes for
+   nested forms. The raw output is always kept.
+7. **`seconds` is the batch wall time divided by the batch size.**
+8. **B-Abs and APG are skipped** for an extractor without dev thresholds (the
+   state before annotation) instead of failing the whole run.
+9. **The test split is guarded in code**: `run_matrix(..., "test")` raises
+   unless `outputs/frozen.json` exists and matches the current prompt hashes
+   and thresholds (spec §0.6, M8).
+10. **The HF token** is read from `HF_TOKEN`, Colab secrets or Kaggle secrets
+    into the process environment only (`utils.load_hf_token`).
+11. **BLIP-2 fallback** (if Qwen2-VL fails) has no chat template; it gets
+    "Question: {system} {user} Answer:" and counts as a merged system prompt.
+12. **Not yet verified on a GPU**: model loading, batching and the 15 GB peak
+    memory criterion. The local machine has no GPU and Colab is unavailable.
