@@ -342,6 +342,24 @@ def purge_stale(cfg: Mapping[str, Any], split: str) -> dict[str, int]:
                                              if utils.record_key(r, CACHE_KEY) not in stale])
             dropped[str(path)] = len(stale)
             LOGGER.info("Purged %d stale %s records from %s", len(stale), split, path.name)
+
+    # Judge records whose evidence differs from what the judge would see now
+    # (A / A-F are judged against gold, which changes when annotation lands).
+    gold = items.set_index("item_id")
+    for path in sorted((Path(cfg["project_dir"]) / "outputs" / "generation").glob("*/*.jsonl")):
+        side = judge_mod.judge_path(cfg["project_dir"], path)
+        if not side.exists():
+            continue
+        shown = {utils.record_key(r, CACHE_KEY): judge_mod.judge_evidence(r, gold.loc[r["item_id"]])
+                 for r in utils.read_jsonl(path) if r["item_id"] in ids}
+        records = utils.read_jsonl(side)
+        keep = [r for r in records if r["item_id"] not in ids
+                or shown.get(utils.record_key(r, CACHE_KEY)) == r.get("judge_evidence")]
+        if len(keep) < len(records):
+            utils.write_jsonl(side, keep)
+            dropped[str(side)] = len(records) - len(keep)
+            LOGGER.info("Purged %d stale %s judge records from %s",
+                        len(records) - len(keep), split, side.name)
     return dropped
 
 

@@ -257,7 +257,8 @@ def test_purge_stale_drops_outdated_evidence_and_its_claims(project, monkeypatch
     path = generate.generation_path(tmp_project, "C", "llm/one")
     claims.run_claims(tmp_project, path)
     utils.write_jsonl(judge.judge_path(tmp_project, path),
-                      [{**{k: r[k] for k in generate.CACHE_KEY}, "claims": []}
+                      [{**{k: r[k] for k in generate.CACHE_KEY}, "claims": [],
+                        "judge_evidence": r["evidence"]}
                        for r in utils.read_jsonl(path)])
     # Gold changes after annotation: fpi_1 material silk -> cotton.
     manifest = _manifest()
@@ -276,3 +277,26 @@ def test_purge_stale_drops_outdated_evidence_and_its_claims(project, monkeypatch
     rec = next(r for r in utils.read_jsonl(path) if r["item_id"] == "fpi_1")
     assert rec["evidence"]["material"] == "cotton"
     assert generate.purge_stale(project, "dev") == {}
+
+
+def test_purge_stale_drops_judge_records_shown_old_gold(project, tmp_project):
+    # A / A-F are judged against gold, so a gold change makes their judge stale.
+    from groundedgen import judge
+
+    path = generate.generation_path(tmp_project, "A", "vlm/one")
+    utils.write_jsonl(path, [{"item_id": i, "condition": "A", "generator": "vlm/one",
+                              "extractor": None, "mask_attr": None, "text": "x"}
+                             for i in ("fpi_1", "fpi_2")])
+    gold = _manifest().set_index("item_id")
+    utils.write_jsonl(judge.judge_path(tmp_project, path),
+                      [{**{k: r[k] for k in generate.CACHE_KEY}, "claims": [],
+                        "judge_evidence": generate.gold_evidence(gold.loc[r["item_id"]])}
+                       for r in utils.read_jsonl(path)])
+    assert generate.purge_stale(project, "dev") == {}
+    manifest = _manifest()
+    manifest.loc[manifest["item_id"] == "fpi_1", "gt_material"] = "cotton"
+    manifest.to_csv(tmp_project / "data" / "manifest_final.csv", index=False)
+    side = judge.judge_path(tmp_project, path)
+    assert generate.purge_stale(project, "dev") == {str(side): 1}
+    assert [r["item_id"] for r in utils.read_jsonl(side)] == ["fpi_2"]
+    assert len(utils.read_jsonl(path)) == 2  # the description itself is kept
