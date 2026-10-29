@@ -85,7 +85,8 @@ Material is the hardest attribute to judge from a photo. 15.5% of test items hav
   - GD: the generator deviated from correct evidence
   - GF: the generator fabricated an attribute the evidence left unknown
 - **Non-attribute claims (UCR).** A Qwen2.5-7B judge lists unsupported claims, such as fit,
-  function, occasion, and subjective praise.
+  function or occasion. UCR counts the non-subjective ones per description; subjective praise
+  is counted separately.
 - **Statistics.**
   - Exact McNemar with Holm correction within each (attribute, LLM) family.
   - Wilcoxon signed-rank for human ratings.
