@@ -70,7 +70,7 @@ metrics:
   alpha: 0.05
 
 human_eval:
-  n_items: 50
+  n_items: 30             # deviation: spec says 50; team time budget (DECISIONS.md)
   min_ethnic: 8
   conditions: [A-F, B-Abs, APG]
   seed: 42

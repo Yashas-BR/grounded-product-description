@@ -85,3 +85,23 @@ def test_evaluation_writes_tables_figures_and_numbers(project, tmp_project):
     numbers = json.loads((adir / "numbers_dev.json").read_text(encoding="utf-8"))
     assert numbers["split"] == "dev" and numbers["rates"] and numbers["rq1_gd_diff_B_minus_C"]
     assert (adir / "pairs_dev.csv").exists()
+
+
+def test_segments_and_wrap_keep_error_flags():
+    text = "A pink dress with green accents."
+    segs = analysis._segments(text, [(18, 23), (7, 12)])
+    assert segs == [("A pink ", False), ("dress", True), (" with ", False), ("green", True),
+                    (" accents.", False)]
+    lines = analysis._wrap_segments(segs, 12)
+    flat = [(w, e) for line in lines for w, e in line if w.strip()]
+    assert ("dress", True) in flat and ("green", True) in flat and ("pink", False) in flat
+    assert all(sum(len(w) for w, _ in line) <= 12 for line in lines)
+
+
+def test_t8_lists_available_validation_numbers():
+    numbers = {"apg_fallback": {"q|s": {"n": 40, "rate": 0.1}},
+               "judge": {"n_descriptions": 70, "vs_a": {"precision": 0.8, "recall": 0.7},
+                         "vs_b": {"precision": 0.75, "recall": 0.72}, "human_kappa_any_claim": 0.6}}
+    t8 = analysis.table_t8(numbers)
+    assert t8["measure"].tolist() == ["LLM judge"] * 3 + ["APG fallback rate"]
+    assert t8.iloc[-1]["precision"] == "0.100"

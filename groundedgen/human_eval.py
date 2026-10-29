@@ -1,6 +1,7 @@
 """Human evaluation (spec §12, M10).
 
-Three raters score 150 descriptions blind: 50 test items × A-F, B-Abs, APG,
+Three raters score descriptions blind: ``human_eval.n_items`` test items × A-F,
+B-Abs, APG (30 × 3 = 90; the spec says 50, see DECISIONS.md),
 using the primary VLM / LLM and the primary extractor.
 
 * :func:`prepare` — sample, ``outputs/human_eval/sheet.csv`` (shuffled, no
@@ -55,7 +56,16 @@ def sample_items(manifest: pd.DataFrame, n: int = 50, min_ethnic: int = 8,
     frame = manifest[manifest["gt_category"].isin(tx.CATEGORIES)].copy()
     frame["ethnic"] = frame["gt_category"].map(tx.is_ethnic)
     categories = sorted(frame["gt_category"].unique(), key=lambda c: (not tx.is_ethnic(c), c))
+    ethnic = [c for c in categories if tx.is_ethnic(c)]
+    # Ethnic categories first get enough for min_ethnic; the rest is spread
+    # round-robin over the others (all categories round-robin if that suffices).
     quota = {c: n // len(categories) + (i < n % len(categories)) for i, c in enumerate(categories)}
+    if ethnic and sum(quota[c] for c in ethnic) < min_ethnic:
+        each = -(-min_ethnic // len(ethnic))
+        rest = [c for c in categories if c not in ethnic]
+        left = n - each * len(ethnic)
+        quota = {**{c: each for c in ethnic},
+                 **{c: left // len(rest) + (i < left % len(rest)) for i, c in enumerate(rest)}}
     parts = [g.sample(n=min(quota[c], len(g)), random_state=seed)
              for c, g in frame.groupby("gt_category") if c in quota]
     picked = pd.concat(parts)

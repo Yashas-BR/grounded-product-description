@@ -12,6 +12,7 @@ direct labels wherever a colour's contrast is below 3:1.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -282,6 +283,252 @@ def run_evaluation(cfg: Mapping[str, Any], split: str = "test") -> dict[str, Any
     return {"n_pairs": int(len(pairs)), "numbers": str(numbers_path)}
 
 
+# --------------------------------------------------------------------------
+# M11: T1, T6, T8, F5 and the one-call build
+# --------------------------------------------------------------------------
+
+def table_t1(project_dir: str | Path) -> pd.DataFrame:
+    """T1: per split, kappa (raw agreement) per attribute, gold counts per
+    category / color / material and the material unknown share."""
+    project_dir = Path(project_dir)
+    report = json.loads((project_dir / "data" / "ground_truth_report.json").read_text(encoding="utf-8"))
+    manifest = pd.read_csv(project_dir / "data" / "manifest_final.csv", keep_default_na=False)
+    splits = [s for s in ("dev", "test") if s in set(manifest["split"])]
+    rows = []
+    for attribute in tx.ATTRIBUTES:
+        cells = {}
+        for s in splits:
+            a = (report["agreement"].get(s) or {}).get(attribute)
+            cells[s] = f"{a['kappa']:.2f} ({a['raw_agreement']:.2f})" if a else ""
+        rows.append({"section": "kappa (raw agreement)", "label": attribute, **cells})
+    for attribute in tx.ATTRIBUTES:
+        for label in tx.gold_values(attribute):
+            counts = {s: int((manifest.loc[manifest["split"] == s, f"gt_{attribute}"] == label).sum())
+                      for s in splits}
+            if any(counts.values()):
+                rows.append({"section": attribute, "label": label,
+                             **{s: str(v) for s, v in counts.items()}})
+    rows.append({"section": "material", "label": "unknown share",
+                 **{s: f"{report['counts'][s]['material_unknown_share']:.3f}" for s in splits}})
+    rows.append({"section": "items", "label": "annotated",
+                 **{s: str(int((manifest["split"] == s).sum())) for s in splits}})
+    return pd.DataFrame(rows)
+
+
+def _filled(sheet: Path) -> bool:
+    """A returned labelling CSV (from the page) has no ``description`` column."""
+    return sheet.exists() and "description" not in pd.read_csv(sheet, nrows=0).columns
+
+
+def validation_numbers(cfg: Mapping[str, Any], split: str = "test") -> dict[str, Any]:
+    """Claim-extractor and judge validation (when the sheets are back) and the
+    APG fallback rate per LLM x extractor on ``split``."""
+    from groundedgen import claims, data, judge
+
+    project_dir = Path(cfg["project_dir"])
+    out: dict[str, Any] = {}
+    cdir = project_dir.joinpath(*claims.VALIDATION_DIR)
+    if all(_filled(cdir / f"claims_validation_{w}.csv") for w in ("a", "b")):
+        out["claims"] = claims.score_validation(
+            cdir, target=cfg["claims_validation"]["target_precision_recall"])
+    jdir = project_dir / "outputs" / "validation" / "judge"
+    if all(_filled(jdir / f"judge_validation_{w}.csv") for w in ("a", "b")):
+        out["judge"] = judge.score_validation(jdir, judge.judged_descriptions(cfg, split))
+    ids = set(data.load_manifest(cfg, splits=[split])["item_id"])
+    fallback = {}
+    for path in sorted((project_dir / "outputs" / "generation" / "APG").glob("*.jsonl")):
+        records = [r for r in utils.read_jsonl(path) if r["item_id"] in ids]
+        if records:
+            used = [r["apg"]["fallback_used"] for r in records]
+            fallback[f"{short(records[0]['generator'])}|{short(records[0]['extractor'])}"] = {
+                "n": len(used), "rate": sum(used) / len(used)}
+    out["apg_fallback"] = fallback
+    return out
+
+
+def table_t8(numbers: Mapping[str, Any]) -> pd.DataFrame:
+    rows = []
+    if "claims" in numbers:
+        for attribute in tx.ATTRIBUTES:
+            v = numbers["claims"][attribute].get("vs_agreed") or numbers["claims"][attribute]["vs_a"]
+            rows.append({"measure": "claim extractor", "scope": attribute,
+                         "precision": f"{v['precision']:.3f}", "recall": f"{v['recall']:.3f}",
+                         "n": numbers["claims"]["n_descriptions"]})
+    if "judge" in numbers:
+        for who in ("a", "b"):
+            v = numbers["judge"][f"vs_{who}"]
+            rows.append({"measure": "LLM judge", "scope": f"vs labeller {who}",
+                         "precision": f"{v['precision']:.3f}", "recall": f"{v['recall']:.3f}",
+                         "n": numbers["judge"]["n_descriptions"]})
+        rows.append({"measure": "LLM judge", "scope": "human kappa (any claim)",
+                     "precision": f"{numbers['judge']['human_kappa_any_claim']:.3f}", "recall": "",
+                     "n": numbers["judge"]["n_descriptions"]})
+    for scope, v in numbers.get("apg_fallback", {}).items():
+        rows.append({"measure": "APG fallback rate", "scope": scope,
+                     "precision": f"{v['rate']:.3f}", "recall": "", "n": v["n"]})
+    return pd.DataFrame(rows, columns=["measure", "scope", "precision", "recall", "n"])
+
+
+def _segments(text: str, spans: Sequence[Sequence[int]]) -> list[tuple[str, bool]]:
+    """Split ``text`` into (piece, is_error) runs."""
+    out, pos = [], 0
+    for start, end in sorted(spans):
+        if start < pos:
+            continue
+        if start > pos:
+            out.append((text[pos:start], False))
+        out.append((text[start:end], True))
+        pos = end
+    if pos < len(text):
+        out.append((text[pos:], False))
+    return out
+
+
+def _wrap_segments(segments, width: int) -> list[list[tuple[str, bool]]]:
+    """Greedy word wrap that keeps the error flag of every word."""
+    words = [(token, err) for piece, err in segments
+             for token in re.split(r"(\s+)", piece) if token]
+    lines, line, n = [], [], 0
+    for token, err in words:
+        if token.isspace():
+            if line:
+                line.append((" ", False))
+                n += 1
+            continue
+        if n + len(token) > width and line:
+            while line and line[-1][0] == " ":
+                line.pop()
+            lines.append(line)
+            line, n = [], 0
+        line.append((token, err))
+        n += len(token)
+    if line:
+        lines.append(line)
+    return lines
+
+
+def choose_examples(pairs: pd.DataFrame, vlm: str, llm: str, extractor: str, k: int = 3) -> list[str]:
+    """Items where the image-only description hallucinates and APG does not,
+    with one ethnic-wear item if there is one."""
+    scored = pairs[pairs["mask_attr"].isna()]
+
+    def errors(condition, generator, ext):
+        sub = scored[(scored["condition"] == condition) & (scored["generator"] == generator)]
+        if ext is not None:
+            sub = sub[sub["extractor"] == ext]
+        return sub.groupby("item_id")["outcome"].apply(lambda s: int((s == "hallucination").sum()))
+
+    af, apg = errors("A-F", vlm, None), errors("APG", llm, extractor)
+    good = sorted(i for i in af.index if af[i] > 0 and apg.get(i, 1) == 0) or sorted(af.index)
+    ethnic = set(scored.loc[scored["is_ethnic"].astype(str) == "True", "item_id"])
+    picked = [i for i in good if i in ethnic][:1]
+    picked += [i for i in good if i not in picked][: k - len(picked)]
+    return picked
+
+
+def plot_f5(cfg: Mapping[str, Any], pairs: pd.DataFrame, out_dir: str | Path,
+            vlm: str, llm: str, extractor: str, k: int = 3, name: str = "F5_examples") -> list[str]:
+    """F5: image, evidence and the A-F / B-Abs / APG descriptions with
+    hallucinated attribute mentions marked in red."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from PIL import Image
+
+    from groundedgen import claims, data, generate
+
+    project_dir = Path(cfg["project_dir"])
+    items = choose_examples(pairs, vlm, llm, extractor, k)
+    manifest = data.load_manifest(cfg).set_index("item_id")
+    sources = {"A-F": (vlm, None), "B-Abs": (llm, extractor), "APG": (llm, extractor)}
+    records = {}
+    for condition, (generator, ext) in sources.items():
+        path = generate.generation_path(project_dir, condition, generator, ext)
+        records[condition] = {r["item_id"]: r for r in utils.read_jsonl(path) if r.get("mask_attr") is None}
+    halluc = pairs[(pairs["outcome"] == "hallucination") & pairs["mask_attr"].isna()]
+    fig = plt.figure(figsize=(10, 3.4 * len(items)), facecolor=SURFACE)
+    grid = fig.add_gridspec(len(items), 2, width_ratios=[1, 3.2], hspace=0.25, wspace=0.04)
+    for row, item in enumerate(items):
+        ax_img = fig.add_subplot(grid[row, 0])
+        ax_img.imshow(Image.open(project_dir / manifest.at[item, "image_path"]))
+        ax_img.set_axis_off()
+        gold = ", ".join(str(manifest.at[item, f"gt_{a}"]) for a in tx.ATTRIBUTES)
+        ax_img.set_title(f"{item}\ngold: {gold}", fontsize=7.5, color=INK_2)
+        ax = fig.add_subplot(grid[row, 1])
+        ax.set_axis_off()
+        evidence = records["B-Abs"].get(item, {}).get("evidence") or {}
+        lines = [([("Evidence (B-Abs, APG): " + ", ".join(f"{a}={v}" for a, v in evidence.items()), False)],
+                  "bold", INK_2)]
+        for condition, (generator, ext) in sources.items():
+            record = records[condition].get(item)
+            if record is None:
+                continue
+            bad = halluc[(halluc["item_id"] == item) & (halluc["condition"] == condition)
+                         & (halluc["generator"] == generator)]
+            if ext is not None:
+                bad = bad[bad["extractor"] == ext]
+            wrong = set(bad["attribute"])
+            spans = [(m.start, m.end) for m in claims.find_mentions(record["text"])
+                     if m.attribute in wrong and not m.in_styling
+                     and m.label != manifest.at[item, f"gt_{m.attribute}"]]
+            lines.append(([(f"{condition}:", False)], "bold", CONDITION_COLOR.get(condition, INK)))
+            lines += [(w, "normal", INK) for w in _wrap_segments(_segments(record["text"], spans), 95)[:6]]
+        y = 1.0
+        for segments, weight, color in lines:
+            anchor = None
+            for piece, err in segments:
+                style = dict(fontsize=8, fontweight="bold" if err else weight,
+                             color="#c0262d" if err else color)
+                if err:
+                    style["bbox"] = dict(boxstyle="square,pad=0.05", fc="#fde2e1", ec="none")
+                if anchor is None:
+                    anchor = ax.text(0.0, y, piece, transform=ax.transAxes, va="top", **style)
+                else:
+                    anchor = ax.annotate(piece, xy=(1, 1), xycoords=anchor, va="top", **style)
+            y -= 0.075 if weight == "normal" else 0.085
+    fig.text(0.01, 0.005, "Red: attribute mention whose value differs from the gold label (hallucination).",
+             fontsize=7.5, color=INK_2)
+    _save(fig, Path(out_dir), name)
+    plt.close(fig)
+    return items
+
+
+def build_all(cfg: Mapping[str, Any], split: str = "test", with_extraction: bool = True) -> dict[str, Any]:
+    """M11: regenerate every table and figure (T1-T8, F2-F5) and numbers.json
+    from cached outputs in one call."""
+    from groundedgen import data, eval_extraction, human_eval
+
+    project_dir = Path(cfg["project_dir"])
+    out_dir = project_dir / "outputs" / "analysis"
+    if with_extraction and split == "test":
+        eval_extraction.run_evaluation(cfg, data.load_manifest(cfg))  # T2, F2
+    m9 = run_evaluation(cfg, split)  # T3, T4, T5, T7, F3, F4
+    suffix = "" if split == "test" else f"_{split}"
+    numbers_path = out_dir / f"numbers{suffix}.json"
+    numbers = json.loads(numbers_path.read_text(encoding="utf-8"))
+
+    write_table(table_t1(project_dir), out_dir, "T1_data")  # covers both splits
+    report = json.loads((project_dir / "data" / "ground_truth_report.json").read_text(encoding="utf-8"))
+    numbers["annotation"] = _plain({"agreement": report["agreement"], "counts": report["counts"]})
+
+    validation = validation_numbers(cfg, split)
+    write_table(table_t8(validation), out_dir, f"T8_validation{suffix}")
+    numbers["validation"] = _plain(validation)
+
+    built = {"T6": False}
+    if split == "test" and all((human_eval.out_dir(cfg) / f"ratings_{r}.csv").exists()
+                               for r in human_eval.RATERS):
+        numbers["human_eval"] = _plain(human_eval.run_analysis(cfg))
+        built["T6"] = True
+    pairs = pd.read_csv(out_dir / f"pairs{suffix}.csv", keep_default_na=False).replace({"": None})
+    built["F5_items"] = plot_f5(cfg, pairs, out_dir, cfg["generation"]["vlms"]["primary"],
+                                cfg["generation"]["llms"]["primary"], numbers["primary_extractor"],
+                                name=f"F5_examples{suffix}")
+    utils.write_json(numbers_path, numbers)
+    return {**m9, "built": built}
+
+
 def main(argv: Sequence[str] | None = None) -> None:
     """``python -m groundedgen.analysis [extra.yaml ...] --split test``."""
     import argparse
@@ -290,10 +537,12 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=main.__doc__)
     parser.add_argument("configs", nargs="*")
     parser.add_argument("--split", default="test", choices=["dev", "test"])
+    parser.add_argument("--m9-only", action="store_true", help="only T3/T4/T5/T7, F3/F4")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     cfg = utils.load_config(extra_paths=args.configs)
-    print(json.dumps(run_evaluation(cfg, args.split), indent=2))
+    result = run_evaluation(cfg, args.split) if args.m9_only else build_all(cfg, args.split)
+    print(json.dumps(result, indent=2, default=str))
 
 
 if __name__ == "__main__":

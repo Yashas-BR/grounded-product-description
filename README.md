@@ -63,15 +63,15 @@ every stage caches JSONL outputs and resumes where it stopped.
 |---|-----------|--------|
 | M1 | Foundations: utils, taxonomy, metrics, config, tests | done |
 | M2 | Data: `data.py`, notebook 01 part 1 | done (run locally) |
-| M3 | Annotation: `annotate.py`, `agreement.py`, guidelines, `notebooks/annotation.ipynb` | tool ready locally ([ANNOTATING.md](ANNOTATING.md)); labelling pending |
-| M4 | Extraction: `extract.py`, `eval_extraction.py` | models run on dev+test; thresholds, T2, F2 wait for annotated gold |
-| M5 | Generation: `models.py`, `prompts.py`, `generate.py`, notebook 02 | code done, tested with mock models; GPU run pending |
-| M6 | APG: `apg.py` (+ `claims.py` matcher) | done; fallback rate on real dev outputs pending GPU |
-| M7 | Claims and judge: `claims.py`, `judge.py` | code done; validation needs real outputs + hand labels |
-| M8 | Freeze prompt hashes and thresholds | code done (`generate.freeze`); run after dev thresholds |
-| M9 | Evaluation: `decompose.py`, `analysis.py`, notebook 03 | code done, tested on synthetic data; needs test outputs |
-| M10 | Human evaluation: `human_eval.py`, notebook 04 | done (mock ratings run end to end) |
-| M11 | Paper assets: `analysis.py`, notebook 05 | |
+| M3 | Annotation: `annotate.py`, `agreement.py`, guidelines, `notebooks/annotation.ipynb` | done: dev + test labelled by a and b, adjudicated (0 unresolved) |
+| M4 | Extraction: `extract.py`, `eval_extraction.py` | done: dev-tuned thresholds, T2, F2 on test |
+| M5 | Generation: `models.py`, `prompts.py`, `generate.py`, notebook 02 | done on dev (Kaggle T4); test run on Kaggle |
+| M6 | APG: `apg.py` (+ `claims.py` matcher) | done; dev fallback rate 0–10% |
+| M7 | Claims and judge: `claims.py`, `judge.py` | done; validation pages ready, hand labels pending |
+| M8 | Freeze prompt hashes and thresholds | done (`outputs/frozen.json`, 2026-10-29) |
+| M9 | Evaluation: `decompose.py`, `analysis.py`, notebook 03 | done on dev; test after the Kaggle run |
+| M10 | Human evaluation: `human_eval.py`, notebook 04 | done (mock ratings run end to end); ratings pending |
+| M11 | Paper assets: `analysis.py` (`build_all`), notebook 05 | done: T1–T8, F2–F5, numbers.json in one call |
 
 Nothing in M9 runs on the test split before M8 is complete.
 

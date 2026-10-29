@@ -396,3 +396,16 @@ last. Each entry: what, why, where.
    category with ethnic categories first in the round-robin (so kurta and
    saree get 4 each = 8 ethnic), descriptions from llava (A-F) and Qwen2.5 +
    SigLIP (B-Abs, APG). Publish-as-is alpha uses the nominal level.
+5. **Human evaluation cut to 30 items** (90 descriptions per rater instead
+   of 150) for the team's time budget. Ethnic categories get 4 items each
+   (8 ethnic, as the spec requires), the other 11 categories 2 each.
+
+## M11 paper assets
+
+1. `analysis.build_all(cfg, split)` (and `python -m groundedgen.analysis
+   configs/local.yaml`) regenerates T1–T8, F2–F5 and `numbers.json` in one
+   call. T6 is added when the three rating files exist; T8 adds claim and
+   judge validation once the labelled sheets are back (otherwise it holds the
+   APG fallback rates).
+2. F5 picks items where A-F hallucinates and APG does not (one ethnic item
+   first), and marks in red only the mentions whose value differs from gold.

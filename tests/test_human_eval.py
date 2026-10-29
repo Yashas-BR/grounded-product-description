@@ -37,7 +37,7 @@ def test_sample_is_stratified_with_enough_ethnic_items():
 
 def test_sample_raises_without_enough_ethnic_items():
     with pytest.raises(ValueError):
-        human_eval.sample_items(_manifest(), n=13, min_ethnic=8)
+        human_eval.sample_items(_manifest(per_category=2), n=13, min_ethnic=8)
 
 
 @pytest.fixture
@@ -124,3 +124,10 @@ def test_label_page_lists_rows_and_fields(tmp_path):
     assert "a &lt;b&gt; c" in page  # descriptions are escaped
     assert page.count('data-f="color"') == 2 * 3  # two options + "not stated", per row
     assert json.dumps([1, 2]) in page and '"labelpage_out.csv"' in page
+
+
+def test_small_sample_still_meets_the_ethnic_minimum():
+    items = human_eval.sample_items(_manifest(), n=30, min_ethnic=8, seed=42)
+    assert len(items) == 30 and items["ethnic"].sum() >= 8
+    counts = items[~items["ethnic"]]["gt_category"].value_counts()
+    assert counts.max() - counts.min() <= 1
