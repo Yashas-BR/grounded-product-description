@@ -11,6 +11,11 @@ stage, and proposes Abstention-Preserving Generation (APG). See
 [RESEARCH_DESIGN.md](RESEARCH_DESIGN.md) for the design and
 [DECISIONS.md](DECISIONS.md) for choices made beyond the build spec.
 
+## Results
+
+The written report with all test results is [REPORT.md](REPORT.md); tables and figures are in
+[`paper/`](paper/), released labels in [`release/`](release/).
+
 ## Setup
 
 Local (CPU, tests only):

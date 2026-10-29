@@ -1,0 +1,7 @@
+model,attribute,forced_accuracy,macro_f1,aurc,threshold,coverage,selective_accuracy,abstain_non_det
+clip-vit-large-patch14,category,"0.845 [0.790, 0.895]","0.848 [0.789, 0.889]",0.05,0.566,0.915,0.869,
+clip-vit-large-patch14,color,"0.658 [0.587, 0.728]","0.658 [0.580, 0.717]",0.144,0.914,0.299,0.945,
+clip-vit-large-patch14,material,"0.491 [0.414, 0.568]","0.368 [0.244, 0.425]",0.539,∞,0.0,,1.0
+siglip-so400m-patch14-384,category,"0.910 [0.870, 0.950]","0.912 [0.868, 0.947]",0.022,0.501,0.97,0.928,
+siglip-so400m-patch14-384,color,"0.772 [0.707, 0.832]","0.768 [0.694, 0.826]",0.092,0.605,0.848,0.827,
+siglip-so400m-patch14-384,material,"0.497 [0.420, 0.574]","0.426 [0.330, 0.526]",0.478,0.986,0.02,1.0,1.0

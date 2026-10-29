@@ -1,0 +1,61 @@
+item_id,condition,generator,extractor,mask_attr,row_id,text
+fpi_39330,A,llava-hf/llava-1.5-7b-hf,,,1,A white dress with a ruffled skirt.
+fpi_13304,A,llava-hf/llava-1.5-7b-hf,,,2,A red skirt with a white logo on the side.
+fpi_38841,B-Abs,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,3,"This elegant dress offers a sophisticated silhouette, perfect for any formal event."
+fpi_15910,C,mistralai/Mistral-7B-Instruct-v0.3,,,4,"A stylish grey shirt, perfect for any casual occasion. Crafted with an unknown material, this versatile piece offers a timeless look that complements any wardrobe."
+fpi_30453,A-F,llava-hf/llava-1.5-7b-hf,,,5,A man wearing white pants and a green shirt.
+fpi_18713,C-Mask,mistralai/Mistral-7B-Instruct-v0.3,,material,6,"A sleek grey skirt, perfect for any casual or smart-casual occasion. Its unknown material offers a comfortable and versatile feel. Pair it with your favorite top for a stylish and effortless look."
+fpi_39103,B,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,7,These sleek black synthetic trousers offer a modern look with a comfortable fit.
+fpi_59607,C,mistralai/Mistral-7B-Instruct-v0.3,,,8,"Elegant Chiffon Saree: A timeless piece crafted from soft, flowing chiffon fabric. Perfect for any special occasion or everyday wear, this saree offers a versatile addition to your wardrobe."
+fpi_11174,A-F,llava-hf/llava-1.5-7b-hf,,,9,A man wearing a striped sweater.
+fpi_7187,C-Mask,Qwen/Qwen2.5-7B-Instruct,,category,10,"A sleek black denim piece, perfect for adding a classic touch to any outfit."
+fpi_30453,C,mistralai/Mistral-7B-Instruct-v0.3,,,11,"Classic white denim jeans, crafted from durable denim fabric. Ideal for everyday wear, offering a timeless and versatile style."
+fpi_44655,C,mistralai/Mistral-7B-Instruct-v0.3,,,12,"A classic red cotton shirt, perfect for everyday wear. Its timeless design and comfortable material make it a versatile addition to any wardrobe."
+fpi_59607,B,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,13,"A graceful pink chiffon saree, perfect for adding elegance to any ensemble."
+fpi_11174,A,llava-hf/llava-1.5-7b-hf,,,14,A man wearing a striped sweater with a green and blue stripe.
+fpi_31119,C-Mask,mistralai/Mistral-7B-Instruct-v0.3,,category,15,"Sleek and timeless, this black piece showcases a modern silhouette that effortlessly blends into any wardrobe. Perfect for everyday wear, its unknown material offers a comfortable fit and versatile style."
+fpi_15910,A-F,llava-hf/llava-1.5-7b-hf,,,16,A man wearing a blue shirt and black pants.
+fpi_15910,A,llava-hf/llava-1.5-7b-hf,,,17,A man wearing a blue shirt and black pants.
+fpi_19102,A,llava-hf/llava-1.5-7b-hf,,,18,A woman wearing a pink dress with green accents.
+fpi_59607,B-Abs,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,19,This elegant saree offers a classic Indian attire with versatile styling options.
+fpi_30453,A,llava-hf/llava-1.5-7b-hf,,,20,A man wearing white pants and a green shirt.
+fpi_31696,B-Abs,mistralai/Mistral-7B-Instruct-v0.3,openai/clip-vit-large-patch14,,21,"A traditional kurta, featuring an elegant design. Crafted from an unknown material, this versatile piece is perfect for various occasions. Ideal for those seeking a timeless, classic addition to their wardrobe."
+fpi_13304,APG,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,22,Skirt red.
+fpi_31696,B,mistralai/Mistral-7B-Instruct-v0.3,openai/clip-vit-large-patch14,,23,"A vibrant orange chiffon kurta, perfect for any casual occasion. Its lightweight and flowing fabric ensures comfort and style."
+fpi_59649,C-Mask,mistralai/Mistral-7B-Instruct-v0.3,,material,24,"Vibrant Orange Saree: A captivating traditional piece, perfect for any special occasion. Crafted from an unknown material, this saree radiates a rich, warm charm."
+fpi_31696,APG,mistralai/Mistral-7B-Instruct-v0.3,openai/clip-vit-large-patch14,,25,"A versatile kurta is up for grabs. This piece boasts a timeless design, perfect for various occasions. Its material remains a mystery, adding an element of intrigue to its allure. Embrace the enigma and make it your own today."
+fpi_48392,C-Mask,mistralai/Mistral-7B-Instruct-v0.3,,color,26,"Classic denim trousers, perfect for everyday wear. These trousers offer a timeless style and durable construction, making them a versatile addition to any wardrobe."
+fpi_19102,A-F,llava-hf/llava-1.5-7b-hf,,,27,A woman wearing a pink dress with green accents.
+fpi_38841,B,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,28,This elegant brown synthetic dress exudes sophistication with its smooth texture and versatile design.
+fpi_39330,A-F,llava-hf/llava-1.5-7b-hf,,,29,A white dress with a ruffled skirt.
+fpi_52877,B,mistralai/Mistral-7B-Instruct-v0.3,openai/clip-vit-large-patch14,,30,"A captivating pink chiffon saree, perfect for any special occasion. Its delicate and flowing fabric adds a touch of elegance to your ensemble."
+fpi_48392,APG,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,31,Trousers.
+fpi_39330,A-F,Qwen/Qwen2-VL-2B-Instruct,,,32,"This white, three-layered, petticoat skirt is perfect for any occasion. It features a comfortable elastic waistband and a ruffled design that adds a touch of elegance to any outfit. Whether you're dressing up for a special event or simply looking for a stylish accessory, this skirt is a must-have."
+fpi_39103,APG,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,33,Trousers.
+fpi_20342,C-Mask,Qwen/Qwen2.5-7B-Instruct,,category,34,Experience the softness of pure cotton in a vibrant purple hue. Perfect for everyday wear.
+fpi_9081,A-F,llava-hf/llava-1.5-7b-hf,,,35,A man wearing pink shorts with a white design.
+fpi_18713,B,mistralai/Mistral-7B-Instruct-v0.3,google/siglip-so400m-patch14-384,,36,"A sleek grey synthetic skirt, perfect for any casual or smart-casual occasion. Its synthetic material ensures a comfortable, easy-to-maintain fit. Ideal for adding a touch of modern elegance to your wardrobe."
+fpi_9081,C-Mask,Qwen/Qwen2.5-7B-Instruct,,material,37,These red shorts offer a vibrant pop of color to your wardrobe. Perfect for adding a splash of brightness to any outfit.
+fpi_18713,B-Abs,mistralai/Mistral-7B-Instruct-v0.3,google/siglip-so400m-patch14-384,,38,"A sleek grey skirt, perfect for any casual or smart-casual occasion. Its unknown material offers a comfortable and versatile feel. Pair it with your favorite top for a stylish and effortless look."
+fpi_13304,B-Abs,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,39,"This elegant red skirt adds a touch of sophistication to any outfit. Perfect for various occasions, it offers a stylish addition to your wardrobe."
+fpi_39103,B,Qwen/Qwen2.5-7B-Instruct,openai/clip-vit-large-patch14,,40,These sleek black synthetic trousers offer a modern look with a comfortable fit.
+fpi_47674,C,mistralai/Mistral-7B-Instruct-v0.3,,,41,"A graceful chiffon dress, featuring a timeless silhouette that flatters any figure. Ideal for both casual and formal occasions, this versatile piece is a must-have in any wardrobe."
+fpi_34351,A,llava-hf/llava-1.5-7b-hf,,,42,A man wearing a purple shirt with beer on it.
+fpi_52877,APG,mistralai/Mistral-7B-Instruct-v0.3,openai/clip-vit-large-patch14,,43,"Elegant saree with an enchanting allure. Ideal for special occasions, this versatile piece is perfect for making a lasting impression."
+fpi_9081,A,llava-hf/llava-1.5-7b-hf,,,44,Pink Adidas shorts with a white design.
+fpi_13304,C,mistralai/Mistral-7B-Instruct-v0.3,,,45,"A classic red denim skirt, perfect for everyday wear. Its timeless design and durable denim material make it a versatile addition to any wardrobe. Pair it with a simple top for a casual look or dress it up with a blouse for a more polished style."
+fpi_52877,B-Abs,mistralai/Mistral-7B-Instruct-v0.3,openai/clip-vit-large-patch14,,46,"Elegant Saree: A timeless piece crafted from an unknown material, perfect for any special occasion or everyday wear. Embrace traditional beauty with this versatile saree."
+fpi_48392,B,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,47,"These blue synthetic trousers offer a modern look with a durable, easy-care synthetic material."
+fpi_18713,APG,mistralai/Mistral-7B-Instruct-v0.3,google/siglip-so400m-patch14-384,,48,"A sleek grey skirt adds a touch of sophistication to any outfit. This versatile piece is perfect for both casual and formal occasions. Pair it with a simple top for a chic everyday look, or dress it up with a blazer for a more polished style."
+fpi_38841,C,mistralai/Mistral-7B-Instruct-v0.3,,,49,"A timeless cotton dress, perfect for any occasion. Its classic silhouette and comfortable fabric make it a versatile addition to your wardrobe."
+fpi_34351,A-F,llava-hf/llava-1.5-7b-hf,,,50,A man wearing a purple shirt with beer on it.
+fpi_59607,APG,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,51,"Saree suitable for various occasions, featuring an elegant design with unknown color options."
+fpi_38841,APG,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,52,Dress designed to add elegance to your wardrobe.
+fpi_47674,C-Mask,Qwen/Qwen2.5-7B-Instruct,,category,53,"This elegant chiffon piece offers a light and flowing touch, perfect for adding a touch of grace to any ensemble."
+fpi_39103,APG,Qwen/Qwen2.5-7B-Instruct,openai/clip-vit-large-patch14,,54,Trousers.
+fpi_39330,A,Qwen/Qwen2-VL-2B-Instruct,,,55,"Introducing our elegant and timeless white petticoat skirt! Perfect for adding a touch of sophistication to any outfit, this skirt features three layers of soft, ruffled tulle that create a voluminous and flirty look. The elastic waistband ensures a comfortable fit, making it a versatile piece that can be worn with dresses, skirts, or even leggings. Whether you're dressing up for a special occasion or simply looking for a stylish addition to your wardrobe, this petticoat skirt is a must-have!"
+fpi_39103,B-Abs,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,56,"These trousers offer a versatile addition to your wardrobe, providing a comfortable fit and stylish silhouette."
+fpi_13304,A-F,llava-hf/llava-1.5-7b-hf,,,57,A red skirt with a white logo on the side.
+fpi_13304,B,Qwen/Qwen2.5-7B-Instruct,google/siglip-so400m-patch14-384,,58,"This vibrant red skirt is made from cotton, perfect for everyday wear."
+fpi_47674,C,Qwen/Qwen2.5-7B-Instruct,,,59,"This elegant chiffon dress flows gracefully with every movement, offering a light and airy feel."
+fpi_39103,B-Abs,Qwen/Qwen2.5-7B-Instruct,openai/clip-vit-large-patch14,,60,"These trousers offer a versatile addition to your wardrobe, providing a comfortable fit and stylish silhouette."

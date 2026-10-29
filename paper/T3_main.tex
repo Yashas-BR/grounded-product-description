@@ -1,0 +1,66 @@
+\begin{tabular}{llllrlll}
+\toprule
+condition & generator & extractor & attribute & N & HR & coverage & precision \\
+\midrule
+A & Qwen2-VL-2B-Instruct &  & category & 200 & 0.165 [0.115, 0.220] & 0.950 [0.920, 0.975] & 0.826 [0.772, 0.876] \\
+A & Qwen2-VL-2B-Instruct &  & color & 184 & 0.462 [0.391, 0.538] & 0.755 [0.690, 0.815] & 0.388 [0.306, 0.470] \\
+A & Qwen2-VL-2B-Instruct &  & material & 200 & 0.070 [0.040, 0.105] & 0.130 [0.085, 0.180] & 0.462 [0.263, 0.652] \\
+A & llava-1.5-7b-hf &  & category & 200 & 0.445 [0.375, 0.515] & 0.990 [0.975, 1.000] & 0.551 [0.480, 0.622] \\
+A & llava-1.5-7b-hf &  & color & 184 & 0.516 [0.446, 0.592] & 0.924 [0.886, 0.962] & 0.441 [0.365, 0.514] \\
+A & llava-1.5-7b-hf &  & material & 200 & 0.000 [0.000, 0.000] & 0.005 [0.000, 0.015] & 1.000 [1.000, 1.000] \\
+A-F & Qwen2-VL-2B-Instruct &  & category & 200 & 0.170 [0.120, 0.220] & 0.955 [0.925, 0.980] & 0.822 [0.768, 0.872] \\
+A-F & Qwen2-VL-2B-Instruct &  & color & 184 & 0.516 [0.446, 0.587] & 0.826 [0.766, 0.880] & 0.375 [0.297, 0.450] \\
+A-F & Qwen2-VL-2B-Instruct &  & material & 200 & 0.065 [0.035, 0.100] & 0.125 [0.080, 0.170] & 0.480 [0.280, 0.680] \\
+A-F & llava-1.5-7b-hf &  & category & 200 & 0.460 [0.390, 0.530] & 0.995 [0.985, 1.000] & 0.538 [0.467, 0.608] \\
+A-F & llava-1.5-7b-hf &  & color & 184 & 0.451 [0.375, 0.527] & 0.913 [0.870, 0.951] & 0.506 [0.430, 0.583] \\
+A-F & llava-1.5-7b-hf &  & material & 200 & 0.000 [0.000, 0.000] & 0.005 [0.000, 0.015] & 1.000 [1.000, 1.000] \\
+B & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & category & 200 & 0.090 [0.050, 0.130] & 1.000 [1.000, 1.000] & 0.910 [0.870, 0.950] \\
+B & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & color & 184 & 0.228 [0.168, 0.293] & 1.000 [1.000, 1.000] & 0.772 [0.707, 0.832] \\
+B & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & material & 200 & 0.580 [0.515, 0.650] & 1.000 [1.000, 1.000] & 0.420 [0.350, 0.485] \\
+B & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & category & 200 & 0.155 [0.105, 0.210] & 1.000 [1.000, 1.000] & 0.845 [0.790, 0.895] \\
+B & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & color & 184 & 0.342 [0.272, 0.413] & 1.000 [1.000, 1.000] & 0.658 [0.587, 0.728] \\
+B & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & material & 200 & 0.585 [0.515, 0.655] & 1.000 [1.000, 1.000] & 0.415 [0.345, 0.485] \\
+B & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & category & 200 & 0.090 [0.050, 0.130] & 0.990 [0.975, 1.000] & 0.909 [0.867, 0.949] \\
+B & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & color & 184 & 0.228 [0.168, 0.293] & 1.000 [1.000, 1.000] & 0.772 [0.707, 0.832] \\
+B & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & material & 200 & 0.580 [0.515, 0.650] & 1.000 [1.000, 1.000] & 0.420 [0.350, 0.485] \\
+B & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & category & 200 & 0.155 [0.105, 0.210] & 1.000 [1.000, 1.000] & 0.845 [0.790, 0.895] \\
+B & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & color & 184 & 0.342 [0.272, 0.413] & 1.000 [1.000, 1.000] & 0.658 [0.587, 0.728] \\
+B & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & material & 200 & 0.585 [0.515, 0.655] & 1.000 [1.000, 1.000] & 0.415 [0.345, 0.485] \\
+B-Abs & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & category & 200 & 0.070 [0.035, 0.110] & 0.970 [0.945, 0.990] & 0.928 [0.888, 0.964] \\
+B-Abs & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & color & 184 & 0.147 [0.103, 0.201] & 0.848 [0.793, 0.897] & 0.827 [0.766, 0.881] \\
+B-Abs & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & material & 200 & 0.000 [0.000, 0.000] & 0.020 [0.005, 0.040] & 1.000 [1.000, 1.000] \\
+B-Abs & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & category & 200 & 0.120 [0.075, 0.165] & 0.915 [0.875, 0.950] & 0.869 [0.818, 0.916] \\
+B-Abs & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & color & 184 & 0.016 [0.000, 0.038] & 0.299 [0.234, 0.370] & 0.945 [0.873, 1.000] \\
+B-Abs & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & material & 200 & 0.000 [0.000, 0.000] & 0.000 [0.000, 0.000] & nan [nan, nan] \\
+B-Abs & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & category & 200 & 0.070 [0.035, 0.110] & 0.940 [0.905, 0.970] & 0.926 [0.885, 0.963] \\
+B-Abs & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & color & 184 & 0.147 [0.103, 0.201] & 0.848 [0.793, 0.897] & 0.827 [0.766, 0.881] \\
+B-Abs & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & material & 200 & 0.000 [0.000, 0.000] & 0.025 [0.005, 0.050] & 1.000 [1.000, 1.000] \\
+B-Abs & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & category & 200 & 0.120 [0.075, 0.165] & 0.910 [0.870, 0.950] & 0.868 [0.817, 0.915] \\
+B-Abs & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & color & 184 & 0.016 [0.000, 0.038] & 0.299 [0.234, 0.370] & 0.945 [0.873, 1.000] \\
+B-Abs & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & material & 200 & 0.000 [0.000, 0.000] & 0.000 [0.000, 0.000] & nan [nan, nan] \\
+APG & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & category & 200 & 0.070 [0.035, 0.110] & 0.970 [0.945, 0.990] & 0.928 [0.888, 0.964] \\
+APG & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & color & 184 & 0.147 [0.103, 0.201] & 0.848 [0.793, 0.897] & 0.827 [0.766, 0.881] \\
+APG & Qwen2.5-7B-Instruct & siglip-so400m-patch14-384 & material & 200 & 0.000 [0.000, 0.000] & 0.020 [0.005, 0.040] & 1.000 [1.000, 1.000] \\
+APG & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & category & 200 & 0.120 [0.075, 0.165] & 0.915 [0.875, 0.950] & 0.869 [0.818, 0.916] \\
+APG & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & color & 184 & 0.016 [0.000, 0.038] & 0.299 [0.234, 0.370] & 0.945 [0.873, 1.000] \\
+APG & Qwen2.5-7B-Instruct & clip-vit-large-patch14 & material & 200 & 0.000 [0.000, 0.000] & 0.000 [0.000, 0.000] & nan [nan, nan] \\
+APG & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & category & 200 & 0.070 [0.035, 0.110] & 0.970 [0.945, 0.990] & 0.928 [0.888, 0.964] \\
+APG & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & color & 184 & 0.147 [0.103, 0.201] & 0.826 [0.772, 0.880] & 0.822 [0.760, 0.878] \\
+APG & Mistral-7B-Instruct-v0.3 & siglip-so400m-patch14-384 & material & 200 & 0.000 [0.000, 0.000] & 0.020 [0.005, 0.040] & 1.000 [1.000, 1.000] \\
+APG & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & category & 200 & 0.120 [0.075, 0.165] & 0.915 [0.875, 0.950] & 0.869 [0.818, 0.916] \\
+APG & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & color & 184 & 0.016 [0.000, 0.038] & 0.283 [0.223, 0.348] & 0.942 [0.867, 1.000] \\
+APG & Mistral-7B-Instruct-v0.3 & clip-vit-large-patch14 & material & 200 & 0.000 [0.000, 0.000] & 0.000 [0.000, 0.000] & nan [nan, nan] \\
+C & Qwen2.5-7B-Instruct &  & category & 200 & 0.000 [0.000, 0.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
+C & Qwen2.5-7B-Instruct &  & color & 184 & 0.000 [0.000, 0.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
+C & Qwen2.5-7B-Instruct &  & material & 200 & 0.000 [0.000, 0.000] & 0.845 [0.795, 0.895] & 1.000 [1.000, 1.000] \\
+C & Mistral-7B-Instruct-v0.3 &  & category & 200 & 0.000 [0.000, 0.000] & 0.995 [0.985, 1.000] & 1.000 [1.000, 1.000] \\
+C & Mistral-7B-Instruct-v0.3 &  & color & 184 & 0.000 [0.000, 0.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
+C & Mistral-7B-Instruct-v0.3 &  & material & 200 & 0.000 [0.000, 0.000] & 0.845 [0.795, 0.895] & 1.000 [1.000, 1.000] \\
+C-Mask & Qwen2.5-7B-Instruct &  & category & 553 & 0.009 [0.002, 0.018] & 0.656 [0.643, 0.671] & 0.986 [0.973, 0.997] \\
+C-Mask & Qwen2.5-7B-Instruct &  & color & 525 & 0.000 [0.000, 0.000] & 0.650 [0.643, 0.655] & 1.000 [1.000, 1.000] \\
+C-Mask & Qwen2.5-7B-Instruct &  & material & 553 & 0.000 [0.000, 0.000] & 0.591 [0.565, 0.616] & 1.000 [1.000, 1.000] \\
+C-Mask & Mistral-7B-Instruct-v0.3 &  & category & 553 & 0.007 [0.002, 0.014] & 0.617 [0.594, 0.637] & 0.988 [0.977, 0.997] \\
+C-Mask & Mistral-7B-Instruct-v0.3 &  & color & 525 & 0.000 [0.000, 0.000] & 0.629 [0.615, 0.641] & 1.000 [1.000, 1.000] \\
+C-Mask & Mistral-7B-Instruct-v0.3 &  & material & 553 & 0.000 [0.000, 0.000] & 0.584 [0.558, 0.608] & 1.000 [1.000, 1.000] \\
+\bottomrule
+\end{tabular}

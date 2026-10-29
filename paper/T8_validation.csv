@@ -1,0 +1,9 @@
+measure,scope,precision,recall,n
+claim extractor,category,1.000,0.945,60
+claim extractor,color,1.000,1.000,60
+claim extractor,material,1.000,1.000,60
+LLM judge,vs labeller a,0.306,0.682,70
+APG fallback rate,Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384,0.020,,200
+APG fallback rate,Mistral-7B-Instruct-v0.3|clip-vit-large-patch14,0.010,,200
+APG fallback rate,Qwen2.5-7B-Instruct|siglip-so400m-patch14-384,0.060,,200
+APG fallback rate,Qwen2.5-7B-Instruct|clip-vit-large-patch14,0.070,,200

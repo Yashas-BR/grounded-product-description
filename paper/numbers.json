@@ -1,0 +1,3382 @@
+{
+  "split": "test",
+  "primary_extractor": "google/siglip-so400m-patch14-384",
+  "rates": {
+    "A|Qwen2-VL-2B-Instruct||category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.165,
+        "low": 0.115,
+        "high": 0.22
+      },
+      "coverage": {
+        "estimate": 0.95,
+        "low": 0.92,
+        "high": 0.975
+      },
+      "precision": {
+        "estimate": 0.8263157894736842,
+        "low": 0.7717275670675301,
+        "high": 0.8756923859343214
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A|Qwen2-VL-2B-Instruct||color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.46195652173913043,
+        "low": 0.391304347826087,
+        "high": 0.5380434782608695
+      },
+      "coverage": {
+        "estimate": 0.7554347826086957,
+        "low": 0.6902173913043478,
+        "high": 0.8152173913043478
+      },
+      "precision": {
+        "estimate": 0.38848920863309355,
+        "low": 0.30597014925373134,
+        "high": 0.4696969696969697
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A|Qwen2-VL-2B-Instruct||material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.07,
+        "low": 0.04,
+        "high": 0.105
+      },
+      "coverage": {
+        "estimate": 0.13,
+        "low": 0.085,
+        "high": 0.18
+      },
+      "precision": {
+        "estimate": 0.46153846153846156,
+        "low": 0.26310068649885593,
+        "high": 0.6522157190635449
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A|llava-1.5-7b-hf||category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.445,
+        "low": 0.375,
+        "high": 0.515
+      },
+      "coverage": {
+        "estimate": 0.99,
+        "low": 0.975,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.5505050505050505,
+        "low": 0.4797979797979798,
+        "high": 0.6224489795918368
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A|llava-1.5-7b-hf||color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.5163043478260869,
+        "low": 0.44565217391304346,
+        "high": 0.592391304347826
+      },
+      "coverage": {
+        "estimate": 0.9239130434782609,
+        "low": 0.8858695652173914,
+        "high": 0.9619565217391305
+      },
+      "precision": {
+        "estimate": 0.4411764705882353,
+        "low": 0.36470588235294116,
+        "high": 0.5142983939137784
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A|llava-1.5-7b-hf||material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.005,
+        "low": 0.0,
+        "high": 0.015
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A-F|Qwen2-VL-2B-Instruct||category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.17,
+        "low": 0.12,
+        "high": 0.22
+      },
+      "coverage": {
+        "estimate": 0.955,
+        "low": 0.925,
+        "high": 0.98
+      },
+      "precision": {
+        "estimate": 0.8219895287958116,
+        "low": 0.7683997155049787,
+        "high": 0.8716611819552996
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A-F|Qwen2-VL-2B-Instruct||color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.5163043478260869,
+        "low": 0.44565217391304346,
+        "high": 0.5869565217391305
+      },
+      "coverage": {
+        "estimate": 0.8260869565217391,
+        "low": 0.7663043478260869,
+        "high": 0.8804347826086957
+      },
+      "precision": {
+        "estimate": 0.375,
+        "low": 0.2972972972972973,
+        "high": 0.4503473574860407
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A-F|Qwen2-VL-2B-Instruct||material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.065,
+        "low": 0.035,
+        "high": 0.1
+      },
+      "coverage": {
+        "estimate": 0.125,
+        "low": 0.08,
+        "high": 0.17
+      },
+      "precision": {
+        "estimate": 0.48,
+        "low": 0.28,
+        "high": 0.68
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A-F|llava-1.5-7b-hf||category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.46,
+        "low": 0.39,
+        "high": 0.53
+      },
+      "coverage": {
+        "estimate": 0.995,
+        "low": 0.985,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.5376884422110553,
+        "low": 0.46733668341708545,
+        "high": 0.6080402010050251
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A-F|llava-1.5-7b-hf||color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.45108695652173914,
+        "low": 0.375,
+        "high": 0.5271739130434783
+      },
+      "coverage": {
+        "estimate": 0.9130434782608695,
+        "low": 0.8695652173913043,
+        "high": 0.9510869565217391
+      },
+      "precision": {
+        "estimate": 0.5059523809523809,
+        "low": 0.43023255813953487,
+        "high": 0.5828220858895705
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "A-F|llava-1.5-7b-hf||material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.005,
+        "low": 0.0,
+        "high": 0.015
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "coverage": {
+        "estimate": 0.97,
+        "low": 0.945,
+        "high": 0.99
+      },
+      "precision": {
+        "estimate": 0.9278350515463918,
+        "low": 0.8883248730964467,
+        "high": 0.9637305699481865
+      },
+      "EP": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "coverage": {
+        "estimate": 0.8478260869565217,
+        "low": 0.7934782608695652,
+        "high": 0.8967391304347826
+      },
+      "precision": {
+        "estimate": 0.8269230769230769,
+        "low": 0.7662234916981753,
+        "high": 0.88125
+      },
+      "EP": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.02,
+        "low": 0.005,
+        "high": 0.04
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Qwen2.5-7B-Instruct|clip-vit-large-patch14|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "coverage": {
+        "estimate": 0.915,
+        "low": 0.875,
+        "high": 0.95
+      },
+      "precision": {
+        "estimate": 0.8688524590163934,
+        "low": 0.8181818181818182,
+        "high": 0.9157421065846463
+      },
+      "EP": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Qwen2.5-7B-Instruct|clip-vit-large-patch14|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "coverage": {
+        "estimate": 0.29891304347826086,
+        "low": 0.23369565217391305,
+        "high": 0.3695652173913043
+      },
+      "precision": {
+        "estimate": 0.9454545454545454,
+        "low": 0.873015873015873,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Qwen2.5-7B-Instruct|clip-vit-large-patch14|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "precision": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "coverage": {
+        "estimate": 0.97,
+        "low": 0.945,
+        "high": 0.99
+      },
+      "precision": {
+        "estimate": 0.9278350515463918,
+        "low": 0.8883248730964467,
+        "high": 0.9637305699481865
+      },
+      "EP": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "coverage": {
+        "estimate": 0.8260869565217391,
+        "low": 0.7717391304347826,
+        "high": 0.8804347826086957
+      },
+      "precision": {
+        "estimate": 0.8223684210526315,
+        "low": 0.76,
+        "high": 0.8783783783783784
+      },
+      "EP": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.02564102564102564,
+        "low": 0.006211180124223602,
+        "high": 0.054551681195516774
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.02,
+        "low": 0.005,
+        "high": 0.04
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "coverage": {
+        "estimate": 0.915,
+        "low": 0.875,
+        "high": 0.95
+      },
+      "precision": {
+        "estimate": 0.8688524590163934,
+        "low": 0.8181818181818182,
+        "high": 0.9157421065846463
+      },
+      "EP": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "coverage": {
+        "estimate": 0.2826086956521739,
+        "low": 0.22282608695652173,
+        "high": 0.34782608695652173
+      },
+      "precision": {
+        "estimate": 0.9423076923076923,
+        "low": 0.8666346153846155,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.05454545454545454,
+        "low": 0.0,
+        "high": 0.125
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "APG|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "precision": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.09,
+        "low": 0.05,
+        "high": 0.13012499999999932
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.91,
+        "low": 0.8698750000000002,
+        "high": 0.95
+      },
+      "EP": {
+        "estimate": 0.09,
+        "low": 0.05,
+        "high": 0.13012499999999932
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.22826086956521738,
+        "low": 0.16847826086956522,
+        "high": 0.29347826086956524
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.7717391304347826,
+        "low": 0.7065217391304348,
+        "high": 0.8315217391304348
+      },
+      "EP": {
+        "estimate": 0.22826086956521738,
+        "low": 0.16847826086956522,
+        "high": 0.29347826086956524
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.58,
+        "low": 0.5148750000000002,
+        "high": 0.65
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.42,
+        "low": 0.35,
+        "high": 0.4851249999999993
+      },
+      "EP": {
+        "estimate": 0.58,
+        "low": 0.5148750000000002,
+        "high": 0.65
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Qwen2.5-7B-Instruct|clip-vit-large-patch14|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.155,
+        "low": 0.105,
+        "high": 0.21
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.845,
+        "low": 0.79,
+        "high": 0.895
+      },
+      "EP": {
+        "estimate": 0.155,
+        "low": 0.105,
+        "high": 0.21
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Qwen2.5-7B-Instruct|clip-vit-large-patch14|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.3423913043478261,
+        "low": 0.2717391304347826,
+        "high": 0.41304347826086957
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.657608695652174,
+        "low": 0.5869565217391305,
+        "high": 0.7282608695652174
+      },
+      "EP": {
+        "estimate": 0.3423913043478261,
+        "low": 0.2717391304347826,
+        "high": 0.41304347826086957
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Qwen2.5-7B-Instruct|clip-vit-large-patch14|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.585,
+        "low": 0.515,
+        "high": 0.655
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.415,
+        "low": 0.345,
+        "high": 0.485
+      },
+      "EP": {
+        "estimate": 0.585,
+        "low": 0.515,
+        "high": 0.655
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.09,
+        "low": 0.05,
+        "high": 0.13012499999999932
+      },
+      "coverage": {
+        "estimate": 0.99,
+        "low": 0.975,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.9090909090909091,
+        "low": 0.8666250000000001,
+        "high": 0.949238578680203
+      },
+      "EP": {
+        "estimate": 0.09,
+        "low": 0.05,
+        "high": 0.13012499999999932
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.01,
+        "low": 0.0,
+        "high": 0.025
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.22826086956521738,
+        "low": 0.16847826086956522,
+        "high": 0.29347826086956524
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.7717391304347826,
+        "low": 0.7065217391304348,
+        "high": 0.8315217391304348
+      },
+      "EP": {
+        "estimate": 0.22826086956521738,
+        "low": 0.16847826086956522,
+        "high": 0.29347826086956524
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.58,
+        "low": 0.5148750000000002,
+        "high": 0.65
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.42,
+        "low": 0.35,
+        "high": 0.4851249999999993
+      },
+      "EP": {
+        "estimate": 0.575,
+        "low": 0.505,
+        "high": 0.645
+      },
+      "GD": {
+        "estimate": 0.005,
+        "low": 0.0,
+        "high": 0.015
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 0.9913793103448276,
+        "low": 0.971139705882353,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.155,
+        "low": 0.105,
+        "high": 0.21
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.845,
+        "low": 0.79,
+        "high": 0.895
+      },
+      "EP": {
+        "estimate": 0.155,
+        "low": 0.105,
+        "high": 0.21
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.3423913043478261,
+        "low": 0.2717391304347826,
+        "high": 0.41304347826086957
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.657608695652174,
+        "low": 0.5869565217391305,
+        "high": 0.7282608695652174
+      },
+      "EP": {
+        "estimate": 0.3423913043478261,
+        "low": 0.2717391304347826,
+        "high": 0.41304347826086957
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.585,
+        "low": 0.515,
+        "high": 0.655
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 0.415,
+        "low": 0.345,
+        "high": 0.485
+      },
+      "EP": {
+        "estimate": 0.585,
+        "low": 0.515,
+        "high": 0.655
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "coverage": {
+        "estimate": 0.97,
+        "low": 0.945,
+        "high": 0.99
+      },
+      "precision": {
+        "estimate": 0.9278350515463918,
+        "low": 0.8883248730964467,
+        "high": 0.9637305699481865
+      },
+      "EP": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "coverage": {
+        "estimate": 0.8478260869565217,
+        "low": 0.7934782608695652,
+        "high": 0.8967391304347826
+      },
+      "precision": {
+        "estimate": 0.8269230769230769,
+        "low": 0.7662234916981753,
+        "high": 0.88125
+      },
+      "EP": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.02,
+        "low": 0.005,
+        "high": 0.04
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|clip-vit-large-patch14|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "coverage": {
+        "estimate": 0.915,
+        "low": 0.875,
+        "high": 0.95
+      },
+      "precision": {
+        "estimate": 0.8688524590163934,
+        "low": 0.8181818181818182,
+        "high": 0.9157421065846463
+      },
+      "EP": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|clip-vit-large-patch14|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "coverage": {
+        "estimate": 0.29891304347826086,
+        "low": 0.23369565217391305,
+        "high": 0.3695652173913043
+      },
+      "precision": {
+        "estimate": 0.9454545454545454,
+        "low": 0.873015873015873,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|clip-vit-large-patch14|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "precision": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "coverage": {
+        "estimate": 0.94,
+        "low": 0.905,
+        "high": 0.97
+      },
+      "precision": {
+        "estimate": 0.925531914893617,
+        "low": 0.8852200172562554,
+        "high": 0.9625668449197861
+      },
+      "EP": {
+        "estimate": 0.07,
+        "low": 0.035,
+        "high": 0.11
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.030927835051546393,
+        "low": 0.01020408163265306,
+        "high": 0.05729916557591619
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "coverage": {
+        "estimate": 0.8478260869565217,
+        "low": 0.7934782608695652,
+        "high": 0.8967391304347826
+      },
+      "precision": {
+        "estimate": 0.8269230769230769,
+        "low": 0.7662234916981753,
+        "high": 0.88125
+      },
+      "EP": {
+        "estimate": 0.14673913043478262,
+        "low": 0.10326086956521739,
+        "high": 0.20108695652173914
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.025,
+        "low": 0.005,
+        "high": 0.05
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.00510204081632653,
+        "low": 0.0,
+        "high": 0.015627045157068052
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "coverage": {
+        "estimate": 0.91,
+        "low": 0.87,
+        "high": 0.95
+      },
+      "precision": {
+        "estimate": 0.8681318681318682,
+        "low": 0.8166666666666667,
+        "high": 0.9149145350227108
+      },
+      "EP": {
+        "estimate": 0.12,
+        "low": 0.075,
+        "high": 0.165
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.00546448087431694,
+        "low": 0.0,
+        "high": 0.016853932584269662
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "coverage": {
+        "estimate": 0.29891304347826086,
+        "low": 0.23369565217391305,
+        "high": 0.3695652173913043
+      },
+      "precision": {
+        "estimate": 0.9454545454545454,
+        "low": 0.873015873015873,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.016304347826086956,
+        "low": 0.0,
+        "high": 0.03804347826086957
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14|material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "precision": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C|Qwen2.5-7B-Instruct||category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C|Qwen2.5-7B-Instruct||color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C|Qwen2.5-7B-Instruct||material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.845,
+        "low": 0.795,
+        "high": 0.895
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C|Mistral-7B-Instruct-v0.3||category": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.995,
+        "low": 0.985,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.005,
+        "low": 0.0,
+        "high": 0.015
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C|Mistral-7B-Instruct-v0.3||color": {
+      "N": 184,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C|Mistral-7B-Instruct-v0.3||material": {
+      "N": 200,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.845,
+        "low": 0.795,
+        "high": 0.895
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C-Mask|Qwen2.5-7B-Instruct||category": {
+      "N": 553,
+      "HR": {
+        "estimate": 0.009041591320072333,
+        "low": 0.0018049728428789803,
+        "high": 0.018018018018018018
+      },
+      "coverage": {
+        "estimate": 0.6564195298372514,
+        "low": 0.642853854248882,
+        "high": 0.6708185053380783
+      },
+      "precision": {
+        "estimate": 0.9862258953168044,
+        "low": 0.9731164681332058,
+        "high": 0.997229916897507
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.009041591320072333,
+        "low": 0.0018049728428789803,
+        "high": 0.018018018018018018
+      },
+      "extraction_share": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "leakage": {
+        "estimate": 0.05,
+        "low": 0.02,
+        "high": 0.085
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C-Mask|Qwen2.5-7B-Instruct||color": {
+      "N": 525,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.6495238095238095,
+        "low": 0.6427184466019418,
+        "high": 0.6554307116104869
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C-Mask|Qwen2.5-7B-Instruct||material": {
+      "N": 553,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.5913200723327305,
+        "low": 0.5648110200364298,
+        "high": 0.6159327591656132
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.005917159763313609,
+        "low": 0.0,
+        "high": 0.01818181818181818
+      },
+      "inflation": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C-Mask|Mistral-7B-Instruct-v0.3||category": {
+      "N": 553,
+      "HR": {
+        "estimate": 0.007233273056057866,
+        "low": 0.0017793594306049821,
+        "high": 0.014467201299892546
+      },
+      "coverage": {
+        "estimate": 0.6166365280289331,
+        "low": 0.5944954128440367,
+        "high": 0.6368554994620541
+      },
+      "precision": {
+        "estimate": 0.9882697947214076,
+        "low": 0.9766746798970215,
+        "high": 0.9971098265895953
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.007233273056057866,
+        "low": 0.0017793594306049821,
+        "high": 0.014467201299892546
+      },
+      "extraction_share": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "leakage": {
+        "estimate": 0.02,
+        "low": 0.005,
+        "high": 0.04
+      },
+      "inflation": {
+        "estimate": 0.0453257790368272,
+        "low": 0.017391304347826087,
+        "high": 0.0753637357299004
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C-Mask|Mistral-7B-Instruct-v0.3||color": {
+      "N": 525,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.6285714285714286,
+        "low": 0.6149389844925734,
+        "high": 0.6413662239089184
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.03225806451612903,
+        "low": 0.01466275659824047,
+        "high": 0.0511436688311688
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    },
+    "C-Mask|Mistral-7B-Instruct-v0.3||material": {
+      "N": 553,
+      "HR": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "coverage": {
+        "estimate": 0.5840867992766727,
+        "low": 0.5581818181818182,
+        "high": 0.6084674913856408
+      },
+      "precision": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0
+      },
+      "EP": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GD": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "GF": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "extraction_share": {
+        "estimate": null,
+        "low": null,
+        "high": null
+      },
+      "leakage": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "inflation": {
+        "estimate": 0.009202453987730062,
+        "low": 0.0,
+        "high": 0.01904761904761905
+      },
+      "lucky": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      }
+    }
+  },
+  "description_any_hallucination": {
+    "A|Qwen2-VL-2B-Instruct|": {
+      "estimate": 0.54,
+      "low": 0.475,
+      "high": 0.61
+    },
+    "A|llava-1.5-7b-hf|": {
+      "estimate": 0.68,
+      "low": 0.615,
+      "high": 0.745
+    },
+    "A-F|Qwen2-VL-2B-Instruct|": {
+      "estimate": 0.57,
+      "low": 0.5,
+      "high": 0.64
+    },
+    "A-F|llava-1.5-7b-hf|": {
+      "estimate": 0.645,
+      "low": 0.58,
+      "high": 0.71
+    },
+    "APG|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+      "estimate": 0.2,
+      "low": 0.145,
+      "high": 0.26
+    },
+    "APG|Qwen2.5-7B-Instruct|clip-vit-large-patch14": {
+      "estimate": 0.135,
+      "low": 0.09,
+      "high": 0.185
+    },
+    "APG|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384": {
+      "estimate": 0.2,
+      "low": 0.145,
+      "high": 0.26
+    },
+    "APG|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14": {
+      "estimate": 0.135,
+      "low": 0.09,
+      "high": 0.185
+    },
+    "B|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+      "estimate": 0.675,
+      "low": 0.61,
+      "high": 0.74
+    },
+    "B|Qwen2.5-7B-Instruct|clip-vit-large-patch14": {
+      "estimate": 0.745,
+      "low": 0.685,
+      "high": 0.805
+    },
+    "B|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384": {
+      "estimate": 0.675,
+      "low": 0.61,
+      "high": 0.74
+    },
+    "B|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14": {
+      "estimate": 0.745,
+      "low": 0.685,
+      "high": 0.805
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+      "estimate": 0.2,
+      "low": 0.145,
+      "high": 0.26
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|clip-vit-large-patch14": {
+      "estimate": 0.135,
+      "low": 0.09,
+      "high": 0.185
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384": {
+      "estimate": 0.2,
+      "low": 0.145,
+      "high": 0.26
+    },
+    "B-Abs|Mistral-7B-Instruct-v0.3|clip-vit-large-patch14": {
+      "estimate": 0.135,
+      "low": 0.09,
+      "high": 0.185
+    },
+    "C|Qwen2.5-7B-Instruct|": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "C|Mistral-7B-Instruct-v0.3|": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "C-Mask|Qwen2.5-7B-Instruct|": {
+      "estimate": 0.009041591320072333,
+      "low": 0.0018049728428789803,
+      "high": 0.018018018018018018
+    },
+    "C-Mask|Mistral-7B-Instruct-v0.3|": {
+      "estimate": 0.007233273056057866,
+      "low": 0.0017793594306049821,
+      "high": 0.014467201299892546
+    }
+  },
+  "rq1_gd_diff_B_minus_C": {
+    "Qwen2.5-7B-Instruct|category": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "Qwen2.5-7B-Instruct|color": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "Qwen2.5-7B-Instruct|material": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "Mistral-7B-Instruct-v0.3|category": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "Mistral-7B-Instruct-v0.3|color": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "Mistral-7B-Instruct-v0.3|material": {
+      "estimate": 0.005,
+      "low": 0.0,
+      "high": 0.015
+    }
+  },
+  "annotation": {
+    "agreement": {
+      "dev": {
+        "category": {
+          "n_items": 40,
+          "kappa": 1.0,
+          "raw_agreement": 1.0
+        },
+        "color": {
+          "n_items": 40,
+          "kappa": 0.8348245010323468,
+          "raw_agreement": 0.85
+        },
+        "material": {
+          "n_items": 40,
+          "kappa": 0.543031226199543,
+          "raw_agreement": 0.625
+        },
+        "material_kappa_below_threshold": true
+      },
+      "test": {
+        "category": {
+          "n_items": 200,
+          "kappa": 1.0,
+          "raw_agreement": 1.0
+        },
+        "color": {
+          "n_items": 200,
+          "kappa": 0.858734039663135,
+          "raw_agreement": 0.87
+        },
+        "material": {
+          "n_items": 200,
+          "kappa": 0.49558638083228246,
+          "raw_agreement": 0.6
+        },
+        "material_kappa_below_threshold": true
+      }
+    },
+    "counts": {
+      "test": {
+        "gt_source": {
+          "annotated": 200
+        },
+        "gt_category": {
+          "t-shirt": 16,
+          "shirt": 16,
+          "top": 16,
+          "kurta": 16,
+          "saree": 16,
+          "jeans": 15,
+          "trousers": 15,
+          "shorts": 15,
+          "dress": 15,
+          "skirt": 15,
+          "sweater": 15,
+          "sweatshirt": 15,
+          "jacket": 15
+        },
+        "gt_color": {
+          "white": 21,
+          "black": 20,
+          "blue": 20,
+          "beige": 19,
+          "exclude": 16,
+          "pink": 15,
+          "brown": 15,
+          "purple": 14,
+          "green": 14,
+          "grey": 14,
+          "yellow": 12,
+          "orange": 11,
+          "red": 9
+        },
+        "gt_material": {
+          "synthetic": 63,
+          "cotton": 49,
+          "unknown": 31,
+          "denim": 25,
+          "chiffon": 18,
+          "knit": 7,
+          "linen": 3,
+          "leather": 3,
+          "silk": 1
+        },
+        "material_unknown_share": 0.155
+      },
+      "dev": {
+        "gt_source": {
+          "annotated": 40
+        },
+        "gt_category": {
+          "t-shirt": 4,
+          "shirt": 3,
+          "top": 3,
+          "kurta": 3,
+          "saree": 3,
+          "jeans": 3,
+          "trousers": 3,
+          "shorts": 3,
+          "dress": 3,
+          "skirt": 3,
+          "sweater": 3,
+          "sweatshirt": 3,
+          "jacket": 3
+        },
+        "gt_color": {
+          "exclude": 7,
+          "red": 6,
+          "grey": 4,
+          "black": 4,
+          "beige": 3,
+          "white": 3,
+          "purple": 2,
+          "yellow": 2,
+          "brown": 2,
+          "pink": 2,
+          "orange": 2,
+          "green": 2,
+          "blue": 1
+        },
+        "gt_material": {
+          "cotton": 12,
+          "unknown": 8,
+          "denim": 6,
+          "knit": 5,
+          "chiffon": 4,
+          "synthetic": 3,
+          "linen": 1,
+          "leather": 1
+        },
+        "material_unknown_share": 0.2
+      }
+    }
+  },
+  "validation": {
+    "claims": {
+      "n_descriptions": 60,
+      "target": 0.95,
+      "category": {
+        "vs_a": {
+          "precision": 0.9821428571428571,
+          "recall": 0.9322033898305084,
+          "n_predicted": 56,
+          "n_gold": 59
+        },
+        "vs_b": {
+          "precision": 0.9821428571428571,
+          "recall": 0.9016393442622951,
+          "n_predicted": 56,
+          "n_gold": 61
+        },
+        "vs_agreed": {
+          "precision": 1.0,
+          "recall": 0.9454545454545454,
+          "n_predicted": 52,
+          "n_gold": 55
+        },
+        "human_agreement": 0.9333333333333333
+      },
+      "color": {
+        "vs_a": {
+          "precision": 0.9574468085106383,
+          "recall": 1.0,
+          "n_predicted": 47,
+          "n_gold": 45
+        },
+        "vs_b": {
+          "precision": 0.9148936170212766,
+          "recall": 0.9555555555555556,
+          "n_predicted": 47,
+          "n_gold": 45
+        },
+        "vs_agreed": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "n_predicted": 38,
+          "n_gold": 38
+        },
+        "human_agreement": 0.9
+      },
+      "material": {
+        "vs_a": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "n_predicted": 20,
+          "n_gold": 20
+        },
+        "vs_b": {
+          "precision": 0.95,
+          "recall": 0.95,
+          "n_predicted": 20,
+          "n_gold": 20
+        },
+        "vs_agreed": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "n_predicted": 19,
+          "n_gold": 19
+        },
+        "human_agreement": 0.9666666666666667
+      },
+      "meets_target": false
+    },
+    "judge": {
+      "n_descriptions": 70,
+      "vs_a": {
+        "precision": 0.30612244897959184,
+        "recall": 0.6818181818181818,
+        "n_judge_claims": 49,
+        "n_human_claims": 22
+      }
+    },
+    "apg_fallback": {
+      "Mistral-7B-Instruct-v0.3|siglip-so400m-patch14-384": {
+        "n": 200,
+        "rate": 0.02
+      },
+      "Mistral-7B-Instruct-v0.3|clip-vit-large-patch14": {
+        "n": 200,
+        "rate": 0.01
+      },
+      "Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+        "n": 200,
+        "rate": 0.06
+      },
+      "Qwen2.5-7B-Instruct|clip-vit-large-patch14": {
+        "n": 200,
+        "rate": 0.07
+      }
+    }
+  },
+  "human_eval": {
+    "n_raters": 2,
+    "n_items": 30,
+    "conditions": {
+      "A-F": {
+        "fluency": {
+          "estimate": 2.15,
+          "low": 1.9666666666666666,
+          "high": 2.3333333333333335
+        },
+        "faithfulness": {
+          "estimate": 3.033333333333333,
+          "low": 2.7666666666666666,
+          "high": 3.2837499999999977
+        },
+        "usefulness": {
+          "estimate": 2.1166666666666667,
+          "low": 1.8833333333333333,
+          "high": 2.3666666666666667
+        },
+        "publish": {
+          "estimate": 0.08333333333333333,
+          "low": 0.016666666666666666,
+          "high": 0.15
+        }
+      },
+      "APG": {
+        "fluency": {
+          "estimate": 1.6666666666666667,
+          "low": 1.3,
+          "high": 2.1
+        },
+        "faithfulness": {
+          "estimate": 2.1666666666666665,
+          "low": 1.7666666666666666,
+          "high": 2.5833333333333335
+        },
+        "usefulness": {
+          "estimate": 1.7166666666666666,
+          "low": 1.3833333333333333,
+          "high": 2.066666666666667
+        },
+        "publish": {
+          "estimate": 0.23333333333333334,
+          "low": 0.1,
+          "high": 0.36666666666666664
+        }
+      },
+      "B-Abs": {
+        "fluency": {
+          "estimate": 4.3,
+          "low": 4.066666666666666,
+          "high": 4.516666666666667
+        },
+        "faithfulness": {
+          "estimate": 4.366666666666666,
+          "low": 4.2,
+          "high": 4.533333333333333
+        },
+        "usefulness": {
+          "estimate": 4.15,
+          "low": 3.9,
+          "high": 4.383333333333334
+        },
+        "publish": {
+          "estimate": 0.9333333333333333,
+          "low": 0.8666666666666667,
+          "high": 0.9833333333333333
+        }
+      }
+    },
+    "tests": [
+      {
+        "scale": "fluency",
+        "left": "APG",
+        "right": "A-F",
+        "n_items": 30,
+        "statistic": 108.5,
+        "p_value": 0.05079568324816777,
+        "mean_diff": -0.48333333333333334,
+        "p_holm": 0.10159136649633554,
+        "reject": false
+      },
+      {
+        "scale": "fluency",
+        "left": "APG",
+        "right": "B-Abs",
+        "n_items": 30,
+        "statistic": 5.0,
+        "p_value": 2.619594421926761e-06,
+        "mean_diff": -2.6333333333333333,
+        "p_holm": 1.5717566531560568e-05,
+        "reject": true
+      },
+      {
+        "scale": "faithfulness",
+        "left": "APG",
+        "right": "A-F",
+        "n_items": 30,
+        "statistic": 63.0,
+        "p_value": 0.004113443411629023,
+        "mean_diff": -0.8666666666666667,
+        "p_holm": 0.012340330234887068,
+        "reject": true
+      },
+      {
+        "scale": "faithfulness",
+        "left": "APG",
+        "right": "B-Abs",
+        "n_items": 30,
+        "statistic": 7.5,
+        "p_value": 3.3909223280809155e-06,
+        "mean_diff": -2.2,
+        "p_holm": 1.6954611640404578e-05,
+        "reject": true
+      },
+      {
+        "scale": "usefulness",
+        "left": "APG",
+        "right": "A-F",
+        "n_items": 30,
+        "statistic": 95.0,
+        "p_value": 0.06428714217351446,
+        "mean_diff": -0.4,
+        "p_holm": 0.10159136649633554,
+        "reject": false
+      },
+      {
+        "scale": "usefulness",
+        "left": "APG",
+        "right": "B-Abs",
+        "n_items": 30,
+        "statistic": 0.0,
+        "p_value": 7.691111175193005e-06,
+        "mean_diff": -2.433333333333333,
+        "p_holm": 3.076444470077202e-05,
+        "reject": true
+      }
+    ],
+    "alpha": {
+      "fluency": 0.8813341338237604,
+      "faithfulness": 0.5749010187637746,
+      "usefulness": 0.8106550614541482,
+      "publish": 0.6590476190476191
+    }
+  },
+  "ucr": {
+    "A|llava-1.5-7b-hf|": {
+      "n": 190,
+      "ucr": 1.0157894736842106,
+      "subjective_per_description": 0.010526315789473684,
+      "parse_error_rate": 0.050000000000000044
+    },
+    "A-F|llava-1.5-7b-hf|": {
+      "n": 188,
+      "ucr": 1.0212765957446808,
+      "subjective_per_description": 0.010638297872340425,
+      "parse_error_rate": 0.06000000000000005
+    },
+    "APG|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+      "n": 200,
+      "ucr": 0.165,
+      "subjective_per_description": 0.105,
+      "parse_error_rate": 0.0
+    },
+    "B|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+      "n": 200,
+      "ucr": 0.685,
+      "subjective_per_description": 0.43,
+      "parse_error_rate": 0.0
+    },
+    "B-Abs|Qwen2.5-7B-Instruct|siglip-so400m-patch14-384": {
+      "n": 198,
+      "ucr": 0.5707070707070707,
+      "subjective_per_description": 0.5707070707070707,
+      "parse_error_rate": 0.010000000000000009
+    },
+    "C|Qwen2.5-7B-Instruct|": {
+      "n": 200,
+      "ucr": 0.68,
+      "subjective_per_description": 0.48,
+      "parse_error_rate": 0.0
+    },
+    "C-Mask|Qwen2.5-7B-Instruct|": {
+      "n": 549,
+      "ucr": 0.7103825136612022,
+      "subjective_per_description": 0.5373406193078324,
+      "parse_error_rate": 0.007233273056057921
+    }
+  }
+}

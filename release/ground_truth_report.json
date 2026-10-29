@@ -1,0 +1,145 @@
+{
+  "annotators": [
+    "a",
+    "b"
+  ],
+  "guidelines_version": "1.1",
+  "agreement": {
+    "dev": {
+      "category": {
+        "n_items": 40,
+        "kappa": 1.0,
+        "raw_agreement": 1.0
+      },
+      "color": {
+        "n_items": 40,
+        "kappa": 0.8348245010323468,
+        "raw_agreement": 0.85
+      },
+      "material": {
+        "n_items": 40,
+        "kappa": 0.543031226199543,
+        "raw_agreement": 0.625
+      },
+      "material_kappa_below_threshold": true
+    },
+    "test": {
+      "category": {
+        "n_items": 200,
+        "kappa": 1.0,
+        "raw_agreement": 1.0
+      },
+      "color": {
+        "n_items": 200,
+        "kappa": 0.858734039663135,
+        "raw_agreement": 0.87
+      },
+      "material": {
+        "n_items": 200,
+        "kappa": 0.49558638083228246,
+        "raw_agreement": 0.6
+      },
+      "material_kappa_below_threshold": true
+    }
+  },
+  "unresolved": {
+    "dev": [],
+    "test": []
+  },
+  "counts": {
+    "test": {
+      "gt_source": {
+        "annotated": 200
+      },
+      "gt_category": {
+        "t-shirt": 16,
+        "shirt": 16,
+        "top": 16,
+        "kurta": 16,
+        "saree": 16,
+        "jeans": 15,
+        "trousers": 15,
+        "shorts": 15,
+        "dress": 15,
+        "skirt": 15,
+        "sweater": 15,
+        "sweatshirt": 15,
+        "jacket": 15
+      },
+      "gt_color": {
+        "white": 21,
+        "black": 20,
+        "blue": 20,
+        "beige": 19,
+        "exclude": 16,
+        "pink": 15,
+        "brown": 15,
+        "purple": 14,
+        "green": 14,
+        "grey": 14,
+        "yellow": 12,
+        "orange": 11,
+        "red": 9
+      },
+      "gt_material": {
+        "synthetic": 63,
+        "cotton": 49,
+        "unknown": 31,
+        "denim": 25,
+        "chiffon": 18,
+        "knit": 7,
+        "linen": 3,
+        "leather": 3,
+        "silk": 1
+      },
+      "material_unknown_share": 0.155
+    },
+    "dev": {
+      "gt_source": {
+        "annotated": 40
+      },
+      "gt_category": {
+        "t-shirt": 4,
+        "shirt": 3,
+        "top": 3,
+        "kurta": 3,
+        "saree": 3,
+        "jeans": 3,
+        "trousers": 3,
+        "shorts": 3,
+        "dress": 3,
+        "skirt": 3,
+        "sweater": 3,
+        "sweatshirt": 3,
+        "jacket": 3
+      },
+      "gt_color": {
+        "exclude": 7,
+        "red": 6,
+        "grey": 4,
+        "black": 4,
+        "beige": 3,
+        "white": 3,
+        "purple": 2,
+        "yellow": 2,
+        "brown": 2,
+        "pink": 2,
+        "orange": 2,
+        "green": 2,
+        "blue": 1
+      },
+      "gt_material": {
+        "cotton": 12,
+        "unknown": 8,
+        "denim": 6,
+        "knit": 5,
+        "chiffon": 4,
+        "synthetic": 3,
+        "linen": 1,
+        "leather": 1
+      },
+      "material_unknown_share": 0.2
+    }
+  },
+  "created": "2026-10-29T05:12:19+00:00"
+}

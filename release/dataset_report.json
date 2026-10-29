@@ -1,0 +1,113 @@
+{
+  "dataset": "benitomartin/fashion-product-images-small-384x512",
+  "revision": "2bb740f8dddd4ee43738bb2b6b4ed4dbb07a3bbe",
+  "loader": "remote_parquet",
+  "filtering": {
+    "n_total": 44072,
+    "n_master_category": 21361,
+    "n_unmapped_article_type": 3727,
+    "n_dropped_color": 472,
+    "n_after_filter": 17162,
+    "dropped_excluded_colors": {
+      "Gold": 5,
+      "Khaki": 49,
+      "Mauve": 3,
+      "Multi": 206,
+      "Nude": 1,
+      "Peach": 105,
+      "Rust": 43,
+      "Silver": 1,
+      "Teal": 59
+    },
+    "dropped_unmapped_colors": {},
+    "missing_article_types": [],
+    "available_per_category": {
+      "t-shirt": 6984,
+      "shirt": 3185,
+      "kurta": 1953,
+      "top": 1675,
+      "jeans": 601,
+      "shorts": 540,
+      "trousers": 500,
+      "dress": 438,
+      "saree": 349,
+      "sweatshirt": 285,
+      "sweater": 275,
+      "jacket": 252,
+      "skirt": 125
+    }
+  },
+  "n_images_too_small": 0,
+  "n_images_written": 240,
+  "splits": {
+    "test": {
+      "n_items": 200,
+      "category_counts": {
+        "t-shirt": 16,
+        "shirt": 16,
+        "top": 16,
+        "kurta": 16,
+        "saree": 16,
+        "jeans": 15,
+        "trousers": 15,
+        "shorts": 15,
+        "dress": 15,
+        "skirt": 15,
+        "sweater": 15,
+        "sweatshirt": 15,
+        "jacket": 15
+      },
+      "color_counts": {
+        "beige": 19,
+        "black": 20,
+        "blue": 21,
+        "brown": 18,
+        "green": 15,
+        "grey": 15,
+        "orange": 13,
+        "pink": 16,
+        "purple": 15,
+        "red": 13,
+        "white": 22,
+        "yellow": 13
+      },
+      "n_ethnic": 32,
+      "category_spread": 1
+    },
+    "dev": {
+      "n_items": 40,
+      "category_counts": {
+        "t-shirt": 4,
+        "shirt": 3,
+        "top": 3,
+        "kurta": 3,
+        "saree": 3,
+        "jeans": 3,
+        "trousers": 3,
+        "shorts": 3,
+        "dress": 3,
+        "skirt": 3,
+        "sweater": 3,
+        "sweatshirt": 3,
+        "jacket": 3
+      },
+      "color_counts": {
+        "beige": 4,
+        "black": 3,
+        "blue": 2,
+        "brown": 3,
+        "green": 2,
+        "grey": 5,
+        "orange": 2,
+        "pink": 3,
+        "purple": 3,
+        "red": 7,
+        "white": 4,
+        "yellow": 2
+      },
+      "n_ethnic": 6,
+      "category_spread": 1
+    }
+  },
+  "created": "2026-10-28T08:27:46+00:00"
+}
