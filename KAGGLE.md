@@ -31,8 +31,9 @@ in a free Kaggle notebook (T4 ×2, about 30 GPU hours a week).
 
 ## Each run
 
-1. Set `SPLIT` in the first cell. Use `"dev"` until M8 has frozen the prompts
-   and thresholds; the code refuses `"test"` before that.
+1. Set `SPLITS` in the first cell. Use `["dev"]` until M8 has frozen the
+   prompts and thresholds; the code refuses `"test"` before that. After the
+   freeze use `["dev", "test"]`: dev is cached and only fills in gaps.
 2. Choose **Save Version → Save & Run All (Commit)**. It runs in the background,
    so you can close the browser. Each 7B model takes a few minutes to download
    the first time.

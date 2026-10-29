@@ -361,3 +361,17 @@ last. Each entry: what, why, where.
    library function, with answers autosaved in the browser) →
    `annotations/test_adjudication.html`, 106 decisions (80 material, 26
    color) on 97 items.
+4. **Test gold**: 200/200 annotated, 0 unresolved after adjudication of 106
+   disagreements (adjudicator sided with a 41×, b 63×, a third value 2×).
+   Material gold: 31/200 `unknown` (15.5%), synthetic 63, cotton 49.
+
+## M8 freeze (2026-10-29)
+
+1. `outputs/frozen.json` written after test gold and before any test
+   generation: prompt template hashes (PROMPT_VERSION v1), dev-tuned
+   thresholds, primary extractor SigLIP. `check_frozen` passes.
+2. Extraction on test (T2, F2) with the frozen dev thresholds: SigLIP forced
+   accuracy category 0.91, color 0.77, material 0.50; CLIP 0.85 / 0.66 / 0.49.
+   Material thresholds give 2% (SigLIP) and 0% (CLIP) coverage on test.
+3. The Kaggle notebook runs a list of splits (`SPLITS = ["dev", "test"]`) so
+   the leftover dev judge records are filled in the same run as test.
