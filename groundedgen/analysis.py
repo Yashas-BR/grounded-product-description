@@ -470,7 +470,7 @@ def plot_f5(cfg: Mapping[str, Any], pairs: pd.DataFrame, out_dir: str | Path,
                 bad = bad[bad["extractor"] == ext]
             wrong = set(bad["attribute"])
             spans = [(m.start, m.end) for m in claims.find_mentions(record["text"])
-                     if m.attribute in wrong and not m.in_styling
+                     if m.attribute in wrong and m.counted
                      and m.label != manifest.at[item, f"gt_{m.attribute}"]]
             lines.append(([(f"{condition}:", False)], "bold", CONDITION_COLOR.get(condition, INK)))
             lines += [(w, "normal", INK) for w in _wrap_segments(_segments(record["text"], spans), 95)[:6]]
@@ -497,10 +497,11 @@ def plot_f5(cfg: Mapping[str, Any], pairs: pd.DataFrame, out_dir: str | Path,
 def build_all(cfg: Mapping[str, Any], split: str = "test", with_extraction: bool = True) -> dict[str, Any]:
     """M11: regenerate every table and figure (T1-T8, F2-F5) and numbers.json
     from cached outputs in one call."""
-    from groundedgen import data, eval_extraction, human_eval
+    from groundedgen import claims, data, eval_extraction, human_eval
 
     project_dir = Path(cfg["project_dir"])
     out_dir = project_dir / "outputs" / "analysis"
+    claims.rebuild_all(project_dir)  # current lexicon rules for every description
     if with_extraction and split == "test":
         eval_extraction.run_evaluation(cfg, data.load_manifest(cfg))  # T2, F2
     m9 = run_evaluation(cfg, split)  # T3, T4, T5, T7, F3, F4

@@ -223,6 +223,17 @@ STYLING_TRIGGERS: tuple[str, ...] = (
     "complete the look",
 )
 
+#: A color word directly describing one of these (optionally one word in
+#: between: "white floral print") is the color of a detail, not of the garment.
+#: Added after claims validation on dev (DECISIONS.md, M7 validation).
+#: Stripes, accents and patterns are deliberately absent: both validation
+#: labellers counted their colors as garment colors.
+DETAIL_NOUNS: tuple[str, ...] = (
+    "logo", "logos", "design", "designs", "print", "prints", "graphic", "graphics",
+    "text", "lettering", "letters", "trim", "trims", "embroidery", "detail", "details",
+    "detailing", "button", "buttons", "motif", "motifs", "piping",
+)
+
 #: A mention is hedged if its sentence contains any of these.
 HEDGE_CUES: tuple[str, ...] = (
     "may vary", "might", "may be", "appears to", "looks like", "seems",

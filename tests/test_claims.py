@@ -112,7 +112,7 @@ def test_multi_value_sets():
     found = claims.extract_claims("A red and navy dress in cotton and polyester. Bright red trim.")
     assert found["color"]["values"] == ["red", "blue"]
     assert found["material"]["values"] == ["cotton", "synthetic"]
-    assert len(found["color"]["spans"]) == 3  # red, navy, red
+    assert len(found["color"]["spans"]) == 2  # red, navy; "red trim" is a detail color
 
 
 def test_off_taxonomy_color_is_other():
@@ -164,3 +164,15 @@ def test_run_claims_writes_cached_file(tmp_path):
     assert rec["claims"]["color"]["values"] == ["red"] and rec["item_id"] == "fpi_1"
     claims.run_claims(tmp_path, gen)
     assert len(utils.read_jsonl(out)) == 1  # cached
+
+
+def test_detail_colors_are_not_garment_colors():
+    def colors(text):
+        return claims.extract_claims(text)["color"]["values"]
+
+    assert colors("A red skirt with a white logo on the side.") == ["red"]
+    assert colors("Blue shirt with red and white embroidery.") == ["blue"]
+    assert colors("A striped sweater with a green and blue stripe.") == ["green", "blue"]
+    assert colors("A white floral print on a blue dress.") == ["blue"]
+    assert colors("A white shirt with stripes.") == ["white"]  # garment color kept
+    assert colors("A white shirt and blue jeans.") == ["white", "blue"]  # two garments

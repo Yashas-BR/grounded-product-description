@@ -43,6 +43,11 @@ class Mention:
     sentence: int
     in_styling: bool
     hedged: bool
+    detail: bool = False  # color of a logo, print, trim ... (tx.DETAIL_NOUNS)
+
+    @property
+    def counted(self) -> bool:
+        return not self.in_styling and not self.detail
 
 
 def normalise(text: str) -> str:
@@ -103,6 +108,9 @@ def _label_of(match_text: str, lexicon: Mapping[str, str]) -> str:
     raise KeyError(match_text)
 
 
+_DETAIL_RE = re.compile(r"\s+(?:(?:and|or|&)\s+[a-z]+\s+)?(?:[a-z]+\s+)?(?:" + "|".join(tx.DETAIL_NOUNS) + r")\b")
+
+
 def find_mentions(text: str) -> list[Mention]:
     """Every attribute mention in ``text``, in order of position."""
     norm = normalise(text)
@@ -122,14 +130,18 @@ def find_mentions(text: str) -> list[Mention]:
                     a <= start and end <= b for a, b in excluded.get(label, [])
                 ):
                     continue
+                # "multicolored print" describes the garment itself, so "other" is kept.
+                detail = (attribute == "color" and label != "other"
+                          and bool(_DETAIL_RE.match(norm, end)))
                 mentions.append(Mention(attribute, label, start, end, idx,
-                                        start >= styling_from, hedged))
+                                        start >= styling_from, hedged, detail))
     return sorted(mentions, key=lambda m: (m.start, m.attribute))
 
 
 def extract_claims(text: str) -> dict[str, dict[str, Any]]:
-    """Stated attributes of one description (styling-clause mentions ignored)."""
-    counted = [m for m in find_mentions(text) if not m.in_styling]
+    """Stated attributes of one description (styling-clause and detail-color
+    mentions ignored)."""
+    counted = [m for m in find_mentions(text) if m.counted]
     out: dict[str, dict[str, Any]] = {}
     for attribute in tx.ATTRIBUTES:
         own = [m for m in counted if m.attribute == attribute]
@@ -258,6 +270,19 @@ def score_validation(out_dir: str | Path, labellers: Sequence[str] = ("a", "b"),
         for m in ("precision", "recall")
     )
     return report
+
+
+def rebuild_all(project_dir: str | Path) -> int:
+    """Recompute every claims file from scratch (deterministic and fast), so
+    claims made with older rules, e.g. merged from a Kaggle run, never linger."""
+    import shutil
+
+    project_dir = Path(project_dir)
+    shutil.rmtree(project_dir / "outputs" / "claims", ignore_errors=True)
+    files = sorted((project_dir / "outputs" / "generation").rglob("*.jsonl"))
+    for path in files:
+        run_claims(project_dir, path)
+    return len(files)
 
 
 VALIDATION_DIR = ("outputs", "validation", "claims")

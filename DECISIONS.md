@@ -409,3 +409,23 @@ last. Each entry: what, why, where.
    APG fallback rates).
 2. F5 picks items where A-F hallucinates and APG does not (one ethnic item
    first), and marks in red only the mentions whose value differs from gold.
+
+## Claim-extractor validation (dev, 60 descriptions, labellers a and b)
+
+1. First pass (spec rules): category P 1.00 / R 0.945, color P 0.905 / R 1.00,
+   material 1.00 / 1.00 against the labels both labellers agree on (human
+   agreement 93%, 90%, 97%). Color fell short because colors of a logo or
+   design ("red skirt with a white logo") counted as garment colors.
+2. Rule fix on dev (spec §10 allows it): a color word directly describing a
+   detail noun (`taxonomy.DETAIL_NOUNS`: logo, design, print, graphic, text,
+   embroidery, trim, buttons, ...; optionally "X and Y" or one word between)
+   is not counted. Stripes, accents and patterns are excluded from the list
+   because both labellers counted those colors as garment colors; "other"
+   (multicolor) is never treated as a detail.
+3. Re-validated: category P 1.00 / R 0.945, color 1.00 / 1.00, material
+   1.00 / 1.00. The category recall gap is the spec's "first category
+   mention" rule: all three misses are second garments in an outfit ("white
+   pants and a green shirt"). Kept as specified and reported.
+4. `analysis.build_all` recomputes every claims file first
+   (`claims.rebuild_all`), so claims merged from runs that used older rules
+   never reach the results. Dev A/A-F color HR dropped by 0.06–0.09.
