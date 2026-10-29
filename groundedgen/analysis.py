@@ -522,7 +522,7 @@ def build_all(cfg: Mapping[str, Any], split: str = "test", with_extraction: bool
                                for r in human_eval.RATERS):
         numbers["human_eval"] = _plain(human_eval.run_analysis(cfg))
         built["T6"] = True
-    pairs = pd.read_csv(out_dir / f"pairs{suffix}.csv", keep_default_na=False).replace({"": None})
+    pairs = pd.read_csv(out_dir / f"pairs_{split}.csv", keep_default_na=False).replace({"": None})
     built["F5_items"] = plot_f5(cfg, pairs, out_dir, cfg["generation"]["vlms"]["primary"],
                                 cfg["generation"]["llms"]["primary"], numbers["primary_extractor"],
                                 name=f"F5_examples{suffix}")
