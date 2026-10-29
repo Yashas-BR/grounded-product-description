@@ -246,6 +246,9 @@ items. Multi-colored ethnic garments are still harder for color.
 
 - **Material agreement is low.** Annotation kappa is 0.50, below the 0.6 target. Guidelines
   were refined once on dev (v1.1) and frozen before test; test was not re-labelled.
+- **Category and color labels were pre-filled.** The annotation tool pre-filled them from the
+  dataset metadata for annotators to verify; only material was labelled from scratch. Their
+  kappa therefore overstates fully independent agreement.
 - **Claim extractor changed once.** One rule was added on dev (colors of logos, prints,
   embroidery and trim are not garment colors) and re-validated.
 - **Judge scope.**
