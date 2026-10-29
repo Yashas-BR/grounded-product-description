@@ -193,23 +193,24 @@ def plot_f2(results: Mapping[str, Mapping[str, Mapping[str, Any]]], out_dir: str
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    fig, axes = plt.subplots(1, len(tx.ATTRIBUTES), figsize=(10, 3.2), sharey=True)
+    from groundedgen.analysis import INK, INK_2, SERIES, SURFACE, _save, _style
+
+    fig, axes = plt.subplots(1, len(tx.ATTRIBUTES), figsize=(10, 3.2), sharey=True, facecolor=SURFACE)
     for ax, attribute in zip(axes, tx.ATTRIBUTES):
-        for model, by_attr in results.items():
+        _style(ax)
+        for color, (model, by_attr) in zip(SERIES, results.items()):
             m = by_attr[attribute]
             label = f"{extract.model_slug(model).split('__')[-1]} (AURC {m['aurc']:.3f})"
             ax.step(m["risk_coverage"]["coverage"], m["risk_coverage"]["risk"],
-                    where="post", label=label)
-        ax.set_title(attribute)
-        ax.set_xlabel("coverage")
+                    where="post", label=label, color=color, linewidth=1.6)
+        ax.set_title(attribute, fontsize=10, color=INK)
+        ax.set_xlabel("coverage", fontsize=8, color=INK_2)
         ax.set_xlim(0, 1)
-        ax.legend(fontsize=7)
-    axes[0].set_ylabel("risk (error rate)")
+        ax.set_ylim(0, 1.05)
+        ax.legend(fontsize=7, frameon=False, loc="upper left")
+    axes[0].set_ylabel("risk (error rate)", fontsize=8, color=INK_2)
     fig.tight_layout()
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    for ext in ("pdf", "png"):
-        fig.savefig(out_dir / f"F2_risk_coverage.{ext}", dpi=200)
+    _save(fig, Path(out_dir), "F2_risk_coverage")
     plt.close(fig)
 
 

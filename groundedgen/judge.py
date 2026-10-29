@@ -341,10 +341,23 @@ VALIDATION_INSTRUCTIONS = (
 )
 
 
+def judgeable_descriptions(cfg: Mapping[str, Any], split: str) -> pd.DataFrame:
+    """Descriptions the primary-configuration judge run covers, with the
+    evidence the judge is shown. Built from generation records, so labelling
+    can start before the judge has run (labellers never see judge output)."""
+    from groundedgen import data
+
+    gold = data.load_manifest(cfg, splits=[split]).set_index("item_id")
+    rows = [{**{k: r[k] for k in CACHE_KEY}, "text": r["text"],
+             "judge_evidence": judge_evidence(r, gold.loc[r["item_id"]])}
+            for path in primary_files(cfg) for r in utils.read_jsonl(path) if r["item_id"] in gold.index]
+    return pd.DataFrame(rows)
+
+
 def prepare_validation(cfg: Mapping[str, Any], split: str = "test",
                        labellers: Sequence[str] = ("a", "b"), fraction: float | None = None,
                        max_n: int | None = None) -> dict[str, Any]:
-    """Sample judged descriptions (stratified by condition), write the blind
+    """Sample primary-configuration descriptions (stratified by condition), write the blind
     sheets, key and one labelling page per labeller under
     ``outputs/validation/judge/``. ``max_n`` caps the sample by lowering the
     fraction evenly across conditions (a documented deviation from 20%)."""
@@ -355,7 +368,7 @@ def prepare_validation(cfg: Mapping[str, Any], split: str = "test",
     jcfg = cfg["judge"]
     fraction = jcfg["validation_fraction"] if fraction is None else fraction
     max_n = jcfg.get("validation_max_n") if max_n is None else max_n
-    records = judged_descriptions(cfg, split)
+    records = judgeable_descriptions(cfg, split)
     if max_n is not None and fraction * len(records) > max_n:
         # Equal share per condition, so no condition dominates a small sample.
         per = max(1, max_n // records["condition"].nunique())

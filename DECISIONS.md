@@ -439,3 +439,14 @@ Qwen2.5 for C/C-Mask; ~1,750 test descriptions). UCR is reported for those;
 attribute hallucination results (T3–T5, T7) cover every generator and
 extractor. The notebook packs `ghd_outputs.zip` right after generation, so a
 stop during judging no longer loses descriptions.
+
+## Finish step
+
+`python -m groundedgen.finish ghd_outputs.zip configs/local.yaml` merges the
+Kaggle outputs, purges stale records, rebuilds every table and figure on test
+(claims recomputed first), adds UCR per configuration to `numbers.json`,
+writes `outputs/analysis/results_summary.md` (headline numbers in sentences
+with CIs, plus the deviations above) and, once, the rating pages and judge
+check pages. `--rebuild` refreshes everything after the human labels return.
+The judge-check sample is drawn from the primary-configuration descriptions
+(`judge.judgeable_descriptions`), the same set the judge scores.
