@@ -450,3 +450,16 @@ with CIs, plus the deviations above) and, once, the rating pages and judge
 check pages. `--rebuild` refreshes everything after the human labels return.
 The judge-check sample is drawn from the primary-configuration descriptions
 (`judge.judgeable_descriptions`), the same set the judge scores.
+
+## Judge validation: one labeller, results (2026-10-29)
+
+- Only labeller a labelled the 70-description judge sheet (time limit); b was skipped, so there is no
+  human-human kappa for the judge. Reported as a deviation.
+- Lines whose type is `none`, `not required` or `not given` are read as the labeller marking the span
+  as *not* an unsupported claim and are dropped (`judge.NOT_A_CLAIM`). Other off-list types are kept
+  as non-subjective claims; matching is by span, so the type only matters for the subjective filter.
+- Result (non-subjective claims): judge precision 0.31, recall 0.68 vs labeller a (49 judge, 22 human
+  claims). The judge over-counts about 2x, so UCR is an upper bound. Mean claims per description by
+  condition: judge and human both rank APG lowest (judge 0.3, human 0.2); other conditions judge
+  0.8-1.1, human 0.3-0.9; Spearman between judge and human counts per description 0.44.
+- Human eval used 2 raters (r1, r2) instead of 3.

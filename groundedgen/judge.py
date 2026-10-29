@@ -222,6 +222,9 @@ def write_validation_sheets(sample: pd.DataFrame, out_dir: str | Path,
     return paths
 
 
+NOT_A_CLAIM = {"none", "not required", "not given"}
+
+
 def parse_human_claims(cell: str) -> list[dict[str, str]]:
     """``words | type`` lines from a validation sheet cell."""
     out = []
@@ -229,7 +232,10 @@ def parse_human_claims(cell: str) -> list[dict[str, str]]:
         if not line.strip() or line.strip().lower() == "none":
             continue
         words, _, kind = line.partition("|")
-        out.append({"text": words.strip(), "type": kind.strip().lower() or "unknown"})
+        kind = kind.strip().lower()
+        if kind in NOT_A_CLAIM:  # labeller marked the span as not an unsupported claim
+            continue
+        out.append({"text": words.strip(), "type": kind or "unknown"})
     return out
 
 

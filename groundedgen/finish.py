@@ -150,9 +150,12 @@ def summary_markdown(cfg: Mapping[str, Any], numbers: Mapping[str, Any],
             for a in tx.ATTRIBUTES) + ".")
     if "judge" in val:
         j = val["judge"]
-        L.append(f"- Judge vs. labeller a: P {j['vs_a']['precision']:.2f} / R {j['vs_a']['recall']:.2f}; "
-                 f"vs. b: P {j['vs_b']['precision']:.2f} / R {j['vs_b']['recall']:.2f}; human kappa "
-                 f"{j['human_kappa_any_claim']:.2f} (n = {j['n_descriptions']}).")
+        parts = [f"vs. labeller {w}: P {j['vs_' + w]['precision']:.2f} / R {j['vs_' + w]['recall']:.2f}"
+                 f" ({j['vs_' + w]['n_human_claims']} human, {j['vs_' + w]['n_judge_claims']} judge claims)"
+                 for w in ("a", "b") if f"vs_{w}" in j]
+        if "human_kappa_any_claim" in j:
+            parts.append(f"human kappa {j['human_kappa_any_claim']:.2f}")
+        L.append(f"- Judge (non-subjective claims) " + "; ".join(parts) + f" (n = {j['n_descriptions']}).")
     else:
         L.append("- Judge validation: pending (labels not returned yet).")
     for k, v in val.get("apg_fallback", {}).items():
@@ -182,7 +185,9 @@ def summary_markdown(cfg: Mapping[str, Any], numbers: Mapping[str, Any],
           "first-mention rule.",
           f"- Judge run on the primary configuration only; judge validation on "
           f"{cfg['judge'].get('validation_max_n', 'n/a')} test descriptions (10 per condition) "
-          "instead of 20% of all test descriptions.",
+          "instead of 20% of all test descriptions"
+          + (", labelled by one labeller (no human-human agreement)." if "judge" in val
+             and "human_kappa_any_claim" not in val["judge"] else "."),
           f"- Human evaluation on {cfg['human_eval']['n_items']} items (spec: 50), keeping "
           f"{cfg['human_eval']['min_ethnic']} ethnic-wear items"
           + (f", rated by {he['n_raters']} raters (spec: 3)." if he and he["n_raters"] < 3 else "."),

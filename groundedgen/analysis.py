@@ -332,8 +332,9 @@ def validation_numbers(cfg: Mapping[str, Any], split: str = "test") -> dict[str,
         out["claims"] = claims.score_validation(
             cdir, target=cfg["claims_validation"]["target_precision_recall"])
     jdir = project_dir / "outputs" / "validation" / "judge"
-    if all(_filled(jdir / f"judge_validation_{w}.csv") for w in ("a", "b")):
-        out["judge"] = judge.score_validation(jdir, judge.judged_descriptions(cfg, split))
+    labellers = [w for w in ("a", "b") if _filled(jdir / f"judge_validation_{w}.csv")]
+    if labellers:
+        out["judge"] = judge.score_validation(jdir, judge.judged_descriptions(cfg, split), labellers)
     ids = set(data.load_manifest(cfg, splits=[split])["item_id"])
     fallback = {}
     for path in sorted((project_dir / "outputs" / "generation" / "APG").glob("*.jsonl")):
@@ -355,14 +356,15 @@ def table_t8(numbers: Mapping[str, Any]) -> pd.DataFrame:
                          "precision": f"{v['precision']:.3f}", "recall": f"{v['recall']:.3f}",
                          "n": numbers["claims"]["n_descriptions"]})
     if "judge" in numbers:
-        for who in ("a", "b"):
+        for who in [w for w in ("a", "b") if f"vs_{w}" in numbers["judge"]]:
             v = numbers["judge"][f"vs_{who}"]
             rows.append({"measure": "LLM judge", "scope": f"vs labeller {who}",
                          "precision": f"{v['precision']:.3f}", "recall": f"{v['recall']:.3f}",
                          "n": numbers["judge"]["n_descriptions"]})
-        rows.append({"measure": "LLM judge", "scope": "human kappa (any claim)",
-                     "precision": f"{numbers['judge']['human_kappa_any_claim']:.3f}", "recall": "",
-                     "n": numbers["judge"]["n_descriptions"]})
+        if "human_kappa_any_claim" in numbers["judge"]:
+            rows.append({"measure": "LLM judge", "scope": "human kappa (any claim)",
+                         "precision": f"{numbers['judge']['human_kappa_any_claim']:.3f}", "recall": "",
+                         "n": numbers["judge"]["n_descriptions"]})
     for scope, v in numbers.get("apg_fallback", {}).items():
         rows.append({"measure": "APG fallback rate", "scope": scope,
                      "precision": f"{v['rate']:.3f}", "recall": "", "n": v["n"]})
