@@ -375,3 +375,22 @@ last. Each entry: what, why, where.
    Material thresholds give 2% (SigLIP) and 0% (CLIP) coverage on test.
 3. The Kaggle notebook runs a list of splits (`SPLITS = ["dev", "test"]`) so
    the leftover dev judge records are filled in the same run as test.
+
+## Validation and human evaluation pages (M7 validation, M10)
+
+1. `labelpage.py` builds one self-contained HTML page per labeller/rater
+   (tick boxes, 1–5 radios or text; autosave in the browser; Finish produces
+   the CSV to paste back). Pages show only what the person must see: the
+   claims page has the description only, the judge page evidence +
+   description, the rating page image + description. Conditions and system
+   outputs never appear.
+2. Claims validation: 60 dev descriptions (9/9/9/9/8/8/8 over the seven
+   conditions, seed 42), `outputs/validation/claims/claims_validation_{a,b}.html`.
+3. Judge validation: `judge.prepare_validation(cfg, "test", max_n=...)`. The
+   spec's 20% of all test descriptions is ~900 per labeller; `max_n` lowers
+   the fraction evenly over conditions if the team cannot label that many
+   (report the actual fraction as a deviation).
+4. Human evaluation: `human_eval.prepare` samples 50 test items stratified by
+   category with ethnic categories first in the round-robin (so kurta and
+   saree get 4 each = 8 ethnic), descriptions from llava (A-F) and Qwen2.5 +
+   SigLIP (B-Abs, APG). Publish-as-is alpha uses the nominal level.

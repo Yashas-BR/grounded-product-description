@@ -211,3 +211,8 @@ def test_claims_validation_round_trip(tmp_path):
     assert report["material"]["vs_b"]["precision"] == pytest.approx(2 / 3)
     assert report["material"]["human_agreement"] == pytest.approx(2 / 3)
     assert not report["meets_target"]
+
+
+def test_none_line_means_no_claims():
+    assert judge.parse_human_claims("none") == []
+    assert judge.parse_human_claims("None\nslim fit | fit") == [{"text": "slim fit", "type": "fit"}]

@@ -209,7 +209,7 @@ def parse_human_claims(cell: str) -> list[dict[str, str]]:
     """``words | type`` lines from a validation sheet cell."""
     out = []
     for line in str(cell or "").splitlines():
-        if not line.strip():
+        if not line.strip() or line.strip().lower() == "none":
             continue
         words, _, kind = line.partition("|")
         out.append({"text": words.strip(), "type": kind.strip().lower() or "unknown"})
@@ -311,3 +311,44 @@ def main(argv: Sequence[str] | None = None) -> None:
 
 if __name__ == "__main__":
     main()
+
+
+VALIDATION_INSTRUCTIONS = (
+    "Each card shows the <b>evidence</b> (the only facts known about the product) and a "
+    "<b>description</b>. List every claim in the description that the evidence does not "
+    "support, <b>except</b> claims about category, color or material. One claim per line, "
+    "as <code>exact words | type</code>, with type one of: fit, size, function, care, "
+    "composition, brand, origin, occasion, pattern, subjective (opinions like “stylish”). "
+    "Example: <code>breathable fabric | function</code>. If there are none, write "
+    "<code>none</code>. Work alone; don't compare with the other labeller."
+)
+
+
+def prepare_validation(cfg: Mapping[str, Any], split: str = "test",
+                       labellers: Sequence[str] = ("a", "b"), fraction: float = 0.2,
+                       max_n: int | None = None) -> dict[str, Any]:
+    """Sample judged descriptions (stratified by condition), write the blind
+    sheets, key and one labelling page per labeller under
+    ``outputs/validation/judge/``. ``max_n`` caps the sample by lowering the
+    fraction evenly across conditions (a documented deviation from 20%)."""
+    import html as _html
+
+    from groundedgen.labelpage import Field, Row, text_block, write_page
+
+    records = judged_descriptions(cfg, split)
+    if max_n is not None and fraction * len(records) > max_n:
+        fraction = max_n / len(records)
+    sample = validation_sample(records, fraction, seed=cfg["seed"])
+    out_dir = utils.project_path(cfg, "outputs", "validation", "judge")
+    write_validation_sheets(sample, out_dir, labellers)
+    fields = [Field("claims", "text", "Unsupported claims (words | type, one per line)",
+                    hint="write none if there are no unsupported claims")]
+    rows = [Row(i + 1, f'<div class="meta">Evidence: <code>{_html.escape(json.dumps(e))}</code></div>'
+                + text_block(t))
+            for i, (e, t) in enumerate(zip(sample["judge_evidence"], sample["text"]))]
+    pages = [write_page(out_dir / f"judge_validation_{who}.html", f"Judge check — labeller {who}",
+                        VALIDATION_INSTRUCTIONS, rows, fields, f"judge_validation_{who}.csv")
+             for who in labellers]
+    return {"n": len(sample), "fraction": fraction,
+            "by_condition": sample["condition"].value_counts().to_dict(),
+            "pages": [str(p) for p in pages]}

@@ -70,7 +70,7 @@ every stage caches JSONL outputs and resumes where it stopped.
 | M7 | Claims and judge: `claims.py`, `judge.py` | code done; validation needs real outputs + hand labels |
 | M8 | Freeze prompt hashes and thresholds | code done (`generate.freeze`); run after dev thresholds |
 | M9 | Evaluation: `decompose.py`, `analysis.py`, notebook 03 | code done, tested on synthetic data; needs test outputs |
-| M10 | Human evaluation: `human_eval.py`, notebook 04 | |
+| M10 | Human evaluation: `human_eval.py`, notebook 04 | done (mock ratings run end to end) |
 | M11 | Paper assets: `analysis.py`, notebook 05 | |
 
 Nothing in M9 runs on the test split before M8 is complete.

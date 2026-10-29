@@ -258,3 +258,55 @@ def score_validation(out_dir: str | Path, labellers: Sequence[str] = ("a", "b"),
         for m in ("precision", "recall")
     )
     return report
+
+
+VALIDATION_DIR = ("outputs", "validation", "claims")
+
+
+def validation_fields():
+    """Tick-box fields for the claims-validation page (one per attribute)."""
+    from groundedgen.labelpage import Field
+
+    return [
+        Field("category", "multi", "Category stated", tx.CATEGORIES, none="not stated"),
+        Field("color", "multi", "Color stated", (*tx.COLORS, "other"), none="not stated",
+              hint="'other' = a color outside these 12 (e.g. maroon → red, but 'teal' → other)"),
+        Field("material", "multi", "Material stated", tx.MATERIALS, none="not stated"),
+    ]
+
+
+VALIDATION_INSTRUCTIONS = (
+    "Read each description and tick what it <b>says</b> about the <b>main garment</b> "
+    "(not what the image shows — there is no image). Tick every value it states, even if hedged "
+    "(“appears to be cotton” → cotton). Ignore styling advice about other items "
+    "(“pair it with blue jeans” is not a color or category of this garment). Synonyms count: "
+    "tee → t-shirt, navy → blue, wool knit → knit. “Unknown material” or no mention → "
+    "<i>not stated</i>. Work alone; don't compare with the other labeller."
+)
+
+
+def prepare_validation(cfg: Mapping[str, Any], split: str = "dev",
+                       labellers: Sequence[str] = ("a", "b")) -> dict[str, Any]:
+    """Sample dev descriptions, write the blind CSV sheets, the key and one
+    labelling page per labeller under ``outputs/validation/claims/``."""
+    import html
+
+    import pandas as pd
+
+    from groundedgen import data
+    from groundedgen.labelpage import Row, text_block, write_page
+
+    ids = set(data.load_manifest(cfg, splits=[split])["item_id"])
+    records = [r for path in sorted(utils.project_path(cfg, "outputs", "generation").rglob("*.jsonl"))
+               for r in utils.read_jsonl(path) if r["item_id"] in ids]
+    sample = validation_sample(pd.DataFrame(records), cfg["claims_validation"]["n_descriptions"],
+                               seed=cfg["seed"])
+    out_dir = utils.project_path(cfg, *VALIDATION_DIR)
+    write_validation_sheets(sample, out_dir, labellers)
+    rows = [Row(i + 1, text_block(t)) for i, t in enumerate(sample["text"])]
+    pages = [write_page(out_dir / f"claims_validation_{who}.html",
+                        f"Claim check — labeller {who}", VALIDATION_INSTRUCTIONS, rows,
+                        validation_fields(), f"claims_validation_{who}.csv")
+             for who in labellers]
+    return {"n": len(sample), "by_condition": sample["condition"].value_counts().to_dict(),
+            "pages": [str(p) for p in pages]}
