@@ -389,7 +389,9 @@ last. Each entry: what, why, where.
 3. Judge validation: `judge.prepare_validation(cfg, "test", max_n=...)`. The
    spec's 20% of all test descriptions is ~900 per labeller; `max_n` lowers
    the fraction evenly over conditions if the team cannot label that many
-   (report the actual fraction as a deviation).
+   (report the actual fraction as a deviation). **Set to 70 (10 per
+   condition, `judge.validation_max_n`)** because of the team's time budget;
+   ~1.5% of test descriptions instead of 20%. Reported as a deviation.
 4. Human evaluation: `human_eval.prepare` samples 50 test items stratified by
    category with ethnic categories first in the round-robin (so kurta and
    saree get 4 each = 8 ethnic), descriptions from llava (A-F) and Qwen2.5 +

@@ -325,7 +325,7 @@ VALIDATION_INSTRUCTIONS = (
 
 
 def prepare_validation(cfg: Mapping[str, Any], split: str = "test",
-                       labellers: Sequence[str] = ("a", "b"), fraction: float = 0.2,
+                       labellers: Sequence[str] = ("a", "b"), fraction: float | None = None,
                        max_n: int | None = None) -> dict[str, Any]:
     """Sample judged descriptions (stratified by condition), write the blind
     sheets, key and one labelling page per labeller under
@@ -335,10 +335,19 @@ def prepare_validation(cfg: Mapping[str, Any], split: str = "test",
 
     from groundedgen.labelpage import Field, Row, text_block, write_page
 
+    jcfg = cfg["judge"]
+    fraction = jcfg["validation_fraction"] if fraction is None else fraction
+    max_n = jcfg.get("validation_max_n") if max_n is None else max_n
     records = judged_descriptions(cfg, split)
     if max_n is not None and fraction * len(records) > max_n:
-        fraction = max_n / len(records)
-    sample = validation_sample(records, fraction, seed=cfg["seed"])
+        # Equal share per condition, so no condition dominates a small sample.
+        per = max(1, max_n // records["condition"].nunique())
+        sample = pd.concat(g.sample(n=min(per, len(g)), random_state=cfg["seed"] + i)
+                           for i, (_, g) in enumerate(records.groupby("condition", sort=True)))
+        sample = sample.sample(frac=1, random_state=cfg["seed"]).reset_index(drop=True)
+        fraction = len(sample) / len(records)
+    else:
+        sample = validation_sample(records, fraction, seed=cfg["seed"])
     out_dir = utils.project_path(cfg, "outputs", "validation", "judge")
     write_validation_sheets(sample, out_dir, labellers)
     fields = [Field("claims", "text", "Unsupported claims (words | type, one per line)",

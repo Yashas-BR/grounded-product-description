@@ -57,6 +57,7 @@ judge:
   model: Qwen/Qwen2.5-7B-Instruct
   max_new_tokens: 256      # see DECISIONS.md
   validation_fraction: 0.2
+  validation_max_n: 70     # deviation: 10 per condition instead of 20% (~900); DECISIONS.md
 
 claims_validation:
   n_descriptions: 60
