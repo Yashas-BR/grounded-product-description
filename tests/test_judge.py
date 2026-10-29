@@ -216,3 +216,16 @@ def test_claims_validation_round_trip(tmp_path):
 def test_none_line_means_no_claims():
     assert judge.parse_human_claims("none") == []
     assert judge.parse_human_claims("None\nslim fit | fit") == [{"text": "slim fit", "type": "fit"}]
+
+
+def test_primary_files_pick_the_primary_configuration(tmp_project):
+    from groundedgen import generate
+
+    cfg = utils.load_config(overrides={"project_dir": str(tmp_project)})
+    utils.write_json(tmp_project / "outputs" / "frozen.json", {"primary_extractor": "ext/one"})
+    gen = cfg["generation"]
+    keep = generate.generation_path(tmp_project, "B", gen["llms"]["primary"], "ext/one")
+    skip = generate.generation_path(tmp_project, "B", gen["llms"]["secondary"], "ext/one")
+    for path in (keep, skip):
+        utils.write_jsonl(path, [{"item_id": "fpi_1"}])
+    assert judge.primary_files(cfg) == [keep]

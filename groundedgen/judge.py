@@ -123,12 +123,29 @@ def run_judge(
     return written
 
 
-def run_all(cfg: Mapping[str, Any], split: str, load_judge=None) -> dict[str, int]:
-    """Judge every generation file for ``split`` with one judge model in memory."""
+def primary_files(cfg: Mapping[str, Any]) -> list[Path]:
+    """Generation files of the primary configuration: primary VLM (A, A-F),
+    primary LLM with the frozen primary extractor (B, B-Abs, APG) and primary
+    LLM for C and C-Mask."""
+    from groundedgen.generate import generation_path
+
+    gen = cfg["generation"]
+    frozen = json.loads(utils.project_path(cfg, "outputs", "frozen.json").read_text(encoding="utf-8"))
+    vlm, llm, ext = gen["vlms"]["primary"], gen["llms"]["primary"], frozen["primary_extractor"]
+    specs = [("A", vlm, None), ("A-F", vlm, None), ("B", llm, ext), ("B-Abs", llm, ext),
+             ("APG", llm, ext), ("C", llm, None), ("C-Mask", llm, None)]
+    return [p for p in (generation_path(cfg["project_dir"], c, g, e) for c, g, e in specs) if p.exists()]
+
+
+def run_all(cfg: Mapping[str, Any], split: str, load_judge=None,
+            primary_only: bool = False) -> dict[str, int]:
+    """Judge every generation file for ``split`` (or only the primary
+    configuration, see :func:`primary_files`) with one judge model in memory."""
     from groundedgen import data, models
 
     manifest = data.load_manifest(cfg, splits=[split])
-    files = sorted(utils.project_path(cfg, "outputs", "generation").rglob("*.jsonl"))
+    files = (primary_files(cfg) if primary_only
+             else sorted(utils.project_path(cfg, "outputs", "generation").rglob("*.jsonl")))
     if not files:
         return {}
     name = cfg["judge"]["model"]

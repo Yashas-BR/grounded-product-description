@@ -429,3 +429,13 @@ last. Each entry: what, why, where.
 4. `analysis.build_all` recomputes every claims file first
    (`claims.rebuild_all`), so claims merged from runs that used older rules
    never reach the results. Dev A/A-F color HR dropped by 0.06–0.09.
+
+## Test judge scope (time budget)
+
+The first test run was stopped by Kaggle during the judge step. To fit the
+team's time budget the judge runs on the **primary configuration only**
+(`judge.primary_files`: llava for A/A-F, Qwen2.5 + SigLIP for B/B-Abs/APG,
+Qwen2.5 for C/C-Mask; ~1,750 test descriptions). UCR is reported for those;
+attribute hallucination results (T3–T5, T7) cover every generator and
+extractor. The notebook packs `ghd_outputs.zip` right after generation, so a
+stop during judging no longer loses descriptions.
