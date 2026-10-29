@@ -165,6 +165,7 @@ def summary_markdown(cfg: Mapping[str, Any], numbers: Mapping[str, Any],
         for cond, m in he["conditions"].items():
             L.append(f"- {cond}: fluency {_ci(m['fluency'])}, faithfulness {_ci(m['faithfulness'])}, "
                      f"usefulness {_ci(m['usefulness'])}, publish-as-is {_ci(m['publish'])}.")
+        L.append(f"- {he['n_raters']} raters, {he['n_items']} items per condition.")
         L.append("- Krippendorff's alpha: " + ", ".join(f"{k} {v:.2f}" for k, v in he["alpha"].items()) + ".")
         for t in he["tests"]:
             L.append(f"- {t['scale']}: {t['left']} − {t['right']} mean difference {t['mean_diff']:+.2f}, "
@@ -183,7 +184,8 @@ def summary_markdown(cfg: Mapping[str, Any], numbers: Mapping[str, Any],
           f"{cfg['judge'].get('validation_max_n', 'n/a')} test descriptions (10 per condition) "
           "instead of 20% of all test descriptions.",
           f"- Human evaluation on {cfg['human_eval']['n_items']} items (spec: 50), keeping "
-          f"{cfg['human_eval']['min_ethnic']} ethnic-wear items.",
+          f"{cfg['human_eval']['min_ethnic']} ethnic-wear items"
+          + (f", rated by {he['n_raters']} raters (spec: 3)." if he and he["n_raters"] < 3 else "."),
           "- The judge is the same model family as one generator (Qwen2.5).", ""]
     return "\n".join(L)
 

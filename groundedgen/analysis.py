@@ -518,9 +518,9 @@ def build_all(cfg: Mapping[str, Any], split: str = "test", with_extraction: bool
     numbers["validation"] = _plain(validation)
 
     built = {"T6": False}
-    if split == "test" and all((human_eval.out_dir(cfg) / f"ratings_{r}.csv").exists()
-                               for r in human_eval.RATERS):
-        numbers["human_eval"] = _plain(human_eval.run_analysis(cfg))
+    raters = [r for r in human_eval.RATERS if (human_eval.out_dir(cfg) / f"ratings_{r}.csv").exists()]
+    if split == "test" and len(raters) >= 2:  # alpha needs at least two raters
+        numbers["human_eval"] = _plain(human_eval.run_analysis(cfg, raters))
         built["T6"] = True
     pairs = pd.read_csv(out_dir / f"pairs_{split}.csv", keep_default_na=False).replace({"": None})
     built["F5_items"] = plot_f5(cfg, pairs, out_dir, cfg["generation"]["vlms"]["primary"],
